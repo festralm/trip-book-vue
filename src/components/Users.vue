@@ -1,6 +1,6 @@
 <template>
   <div class="users-container">
-    <user v-for="(user, index) in users" :key="index"/>
+    <user v-for="(user, index) in users" :key="index" :user="user"/>
   </div>
 </template>
 
