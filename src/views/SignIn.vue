@@ -6,7 +6,7 @@
 import SignInForm from "../layouts/SignInForm";
 export default {
   name: "SignIn",
-  components: {SignInForm}
+  components: {SignInForm},
 }
 </script>
 

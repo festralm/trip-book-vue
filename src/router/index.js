@@ -6,6 +6,7 @@ import SignUp from "../views/SignUp";
 import AdminUsers from "../views/AdminUsers";
 import Admin from "../views/Admin";
 import AdminUser from "../views/AdminUser";
+import AuthLayout from "../layouts/AuthLayout";
 
 Vue.use(VueRouter)
 
@@ -16,14 +17,22 @@ const routes = [
     component: Home
   },
   {
-    path: '/sign-in',
-    name: 'SignIn',
-    component: SignIn
-  },
-  {
-    path: '/sign-up',
-    name: 'SignUp',
-    component: SignUp,
+    path: '/',
+    name: 'AuthLayout',
+    component: AuthLayout,
+    children: [
+      {
+        path: '/sign-in',
+        name: 'SignIn',
+        component: SignIn
+      },
+      {
+        path: '/sign-up',
+        name: 'SignUp',
+        component: SignUp,
+      },
+
+    ]
   },
   {
     path: '/admin',
