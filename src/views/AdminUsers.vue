@@ -1,12 +1,12 @@
 <template>
-<users/>
+  <users-for-admin/>
 </template>
 
 <script>
-import Users from "../components/Users";
+import UsersForAdmin from "../components/UsersForAdmin";
 export default {
   name: "AdminUsers",
-  components: {Users}
+  components: {UsersForAdmin}
 }
 </script>
 

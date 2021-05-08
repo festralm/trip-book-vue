@@ -27,5 +27,8 @@ export default {
 </script>
 
 <style scoped>
-
+.menu {
+  background-color: aqua;
+  margin: 20px;
+}
 </style>

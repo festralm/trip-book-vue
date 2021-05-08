@@ -1,14 +1,14 @@
 <template>
   <div class="users-container">
-    <user v-for="(user, index) in users" :key="index" :user="user" @banUser="banUser" @deleteUser="deleteUser"/>
+    <user-comp-for-admin v-for="(user, index) in users" :key="index" :user="user" @banUser="banUser" @deleteUser="deleteUser"/>
   </div>
 </template>
 
 <script>
-import User from "./User";
+import UserCompForAdmin from "./UserCompForAdmin";
 export default {
-  name: "Users",
-  components: {User},
+  name: "UsersForAdmin",
+  components: {UserCompForAdmin},
   data() {
     return {
       users: [

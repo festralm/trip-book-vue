@@ -1,10 +1,11 @@
 <template>
+
   <div class="user-container">
     <div class="id">
       <p>{{user.id}}</p>
     </div>
     <div class="email">
-      <p>{{user.email}}</p>
+      <a href="">{{user.email}}</a>
     </div>
     <div class="ban" v-if="user.banned === null">
       <p>Не заблокирован</p>
@@ -31,30 +32,37 @@
 
 <script>
 export default {
-  name: "User",
-  props: {
-    user: {
-      type: Object,
-      required: true,
+  name: "UserForAdmin",
+  data() {
+    return {
+      user: {
+        id: 1,
+        email: "alia@gmail.com",
+        banned: null,
+        deleted: null,
+        role: "ADMIN"
+      }
     }
   },
   methods: {
     banUser() {
-      this.$emit('banUser', this.user);
+      if (this.user.banned === null) {
+        this.user.banned = true;
+      } else {
+        this.user.banned = null;
+      }
     },
     deleteUser() {
-      this.$emit('deleteUser', this.user);
+      if (this.user.deleted === null) {
+        this.user.deleted = true;
+      } else {
+        this.user.deleted = null;
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-.user-container {
-  width: 200px;
-  height: 230px;
-  padding: 20px;
-  margin: 10px;
-  background-color: bisque;
-}
+
 </style>

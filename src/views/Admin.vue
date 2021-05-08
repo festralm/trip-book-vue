@@ -1,6 +1,6 @@
 <template>
 <div class="admin-wrapper">
-  <a href="/users">Список всех пользователей</a>
+  <a href="/admin/users">Список всех пользователей</a>
   <admin-search/>
 </div>
 </template>
