@@ -6,18 +6,21 @@
   <div class="home">
     <a href="/">Tripbook</a>
   </div>
-  <navbar :user="user"/>
-  <div class="admin">
-    <a href="/admin">Страница администратора</a>
+  <div class="lease">
+    <a href="/transports">Арендовать транспорт</a>
   </div>
+  <div class="rent-with-driver">
+    <a href="/transports-with-drivers">Не хочу быть за штурвалом</a>
+  </div>
+  <AnonymousNavbar :user="user"/>
 </div>
 </template>
 
 <script>
-import Navbar from "./Navbar";
+import AnonymousNavbar from "./AnonymousNavbar";
 export default {
   name: "MenuLayout",
-  components: {Navbar},
+  components: {AnonymousNavbar},
   data() {
     return {
       user: {}

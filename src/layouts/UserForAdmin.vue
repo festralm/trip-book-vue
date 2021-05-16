@@ -25,6 +25,10 @@
     </div>
     <div class="role">
       <p>{{ user.role }}</p>
+      <p>
+        <button v-if="user.role === 'ADMIN'" @click="undoAdmin">Убрать права администраторва</button>
+        <button v-else @click="undoAdmin">Сделать администратором</button>
+      </p>
     </div>
     <!--TODO задать права-->
   </div>
@@ -58,6 +62,13 @@ export default {
       } else {
         this.user.deleted = null;
       }
+    },
+    undoAdmin() {
+      if (this.user.role === 'ADMIN') {
+        this.user.role = 'USER';
+      } else {
+        this.user.role = 'ADMIN';
+      }
     }
   }
 }
@@ -65,4 +76,12 @@ export default {
 
 <style scoped>
 
+.user-container {
+  width: 200px;
+  height: 300px;
+  padding: 20px;
+  margin: 10px 10px 10px 700px;
+  background-color: bisque;
+  text-align: center;
+}
 </style>

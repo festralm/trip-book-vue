@@ -6,15 +6,18 @@
     <div class="sign-up">
       <a href="/sign-up">Зарегистрироваться</a>
     </div>
-    <div class="logout">
-      <a href="/logout" @click="logout">Выйти</a>
+    <div class="rent-transport">
+      <a href="/rent-transport">Сдать транспорт в аренду</a>
+    </div>
+    <div class="admin">
+      <a href="/admin">Страница администратора</a>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Navbar",
+  name: "AnonymousNavbar",
   props: {
     user: {
       type: Object

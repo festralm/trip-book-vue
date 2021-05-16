@@ -24,6 +24,10 @@
     </div>
     <div class="role">
       <p>{{ user.role }}</p>
+      <p>
+        <button v-if="user.role === 'ADMIN'" @click="undoAdmin">Убрать права администраторва</button>
+        <button v-else @click="undoAdmin">Сделать администратором</button>
+      </p>
     </div>
     <!--TODO задать права-->
   </div>
@@ -44,6 +48,9 @@ export default {
     },
     deleteUser() {
       this.$emit('deleteUser', this.user);
+    },
+    undoAdmin() {
+      this.$emit('undoAdmin', this.user);
     }
   }
 }
@@ -52,9 +59,11 @@ export default {
 <style scoped>
 .user-container {
   width: 200px;
-  height: 230px;
+  height: 300px;
   padding: 20px;
   margin: 10px;
   background-color: bisque;
+  float: left;
+  text-align: center;
 }
 </style>

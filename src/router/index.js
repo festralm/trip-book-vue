@@ -7,49 +7,56 @@ import AdminUsers from "../views/AdminUsers";
 import Admin from "../views/Admin";
 import AdminUser from "../views/AdminUser";
 import AuthLayout from "../layouts/AuthLayout";
+import DefaultLayout from "../layouts/DefaultLayout";
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/',
-    name: 'AuthLayout',
-    component: AuthLayout,
+    name: 'Default',
+    component: DefaultLayout,
     children: [
       {
-        path: '/sign-in',
-        name: 'SignIn',
-        component: SignIn
+        path: '/',
+        name: 'Home',
+        component: Home
       },
       {
-        path: '/sign-up',
-        name: 'SignUp',
-        component: SignUp,
+        path: '/',
+        name: 'AuthLayout',
+        component: AuthLayout,
+        children: [
+          {
+            path: '/sign-in',
+            name: 'SignIn',
+            component: SignIn
+          },
+          {
+            path: '/sign-up',
+            name: 'SignUp',
+            component: SignUp,
+          },
+
+        ]
+      },
+      {
+        path: '/admin',
+        name: 'Admin',
+        component: Admin,
+      },
+      {
+        path: '/admin/users',
+        name: 'Users',
+        component: AdminUsers,
       },
 
+      {
+        path: '/admin/users/1',
+        name: 'User',
+        component: AdminUser
+      },
     ]
-  },
-  {
-    path: '/admin',
-    name: 'Admin',
-    component: Admin,
-  },
-  {
-    path: '/admin/users',
-    name: 'Users',
-    component: AdminUsers,
-  },
-
-  {
-    path: '/admin/users/1',
-    name: 'User',
-    component: AdminUser
-
   },
 ]
 
@@ -60,3 +67,4 @@ const router = new VueRouter({
 })
 
 export default router
+

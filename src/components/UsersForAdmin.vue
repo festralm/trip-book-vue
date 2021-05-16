@@ -1,6 +1,11 @@
 <template>
   <div class="users-container">
-    <user-comp-for-admin v-for="(user, index) in users" :key="index" :user="user" @banUser="banUser" @deleteUser="deleteUser"/>
+    <user-comp-for-admin v-for="(user, index) in users"
+                         :key="index"
+                         :user="user"
+                         @banUser="banUser"
+                         @deleteUser="deleteUser"
+                         @undoAdmin="undoAdmin"/>
   </div>
 </template>
 
@@ -49,6 +54,13 @@ export default {
         user.deleted = true;
       } else {
         user.deleted = null;
+      }
+    },
+    undoAdmin(user) {
+      if (user.role === 'ADMIN') {
+        user.role = 'USER';
+      } else {
+        user.role = 'ADMIN';
       }
     }
   }
