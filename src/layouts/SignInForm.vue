@@ -1,14 +1,13 @@
 <template>
   <div class="sign-in p-3 m-3">
     <h3 class="text-center pb-3 pt-2">Вход</h3>
-    <b-form id="form" @submit.prevent="signIn" action="" method="post">
+    <b-form id="form" @submit.prevent="signIn()" >
       <p v-if="error" class="errors text-center py-1">
         {{ error }}
       </p>
       <b-form-input class="my-2" required type="email" v-model="form.email" name="username" placeholder="Email"></b-form-input>
       <!--      minlength="8"-->
       <b-form-input class="my-2" required type="password" v-model="form.password" name="password" placeholder="Пароль"></b-form-input>
-      <b-form-checkbox class="py-1 text-center" type="checkbox" name="remember-me"> <span class="ps-3">Запомнить меня</span></b-form-checkbox>
       <b-button class="button my-2 w-100" variant="primary" type="submit">Войти</b-button>
       <p class=" text-center m-0 p-1"><router-link to="/sign-up" class="link">Еще не зарегистрированы?</router-link></p>
       <p class="text-center m-0 p-1">или</p>
@@ -38,7 +37,6 @@
 
 <script>
 
-
 import router from "@/router";
 
 export default {
@@ -67,34 +65,18 @@ export default {
       var response = await fetch(request);
 
       response.json().then(data => {
-        if (data['statusNumber'] !== undefined) {
-          this.error = data['message'];
-        } else {
-          localStorage.setItem('token', response.headers.get("Authorization"));
-          router.push("/")
+        if (response.status === 200) {
+          if (data['statusNumber'] === 1) {
+            this.error = data['message'];
+          } else {
+            localStorage.setItem('token', response.headers.get("Authorization"));
+            localStorage.setItem('user', JSON.stringify(data));
+            localStorage.setItem('authorised', 'true');
+            router.push("/")
+          }
         }
       })
     }
-  },
-  async beforeMount() {
-    const request = new Request(
-        "http://localhost/sign-in",
-        {
-          method: "GET",
-        }
-    );
-
-    if (this.$store.state.token !== '') {
-      request.headers.append("Authorization", this.$store.state.token);
-    }
-
-    var response = await fetch(request);
-
-    response.json().then(data => {
-      if (data['statusNumber'] !== 3) {
-        router.push("/")
-      }
-    })
   }
 }
 </script>

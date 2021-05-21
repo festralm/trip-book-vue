@@ -8,7 +8,7 @@
         </p>
       </div>
       <b-form-input class="my-2" required type="email" v-model="form.email" name="username" placeholder="Email"></b-form-input>
-      <b-form-input class="my-2" required v-model="form.phone_number" name="phone_number" placeholder="Номер телефона"></b-form-input>
+      <b-form-input class="my-2" required v-model="form.phoneNumber" name="phone_number" placeholder="Номер телефона"></b-form-input>
       <b-form-input class="my-2" @blur.native="checkPasswords()" required minlength="8" type="password"
                     v-model="form.password" name="password" placeholder="Пароль"></b-form-input>
       <b-form-input class="my-2" @blur.native="checkPasswords()" required minlength="8" type="password"
@@ -49,7 +49,7 @@ export default {
     return {
       form: {
         email: '',
-        phone_number: '',
+        phoneNumber: '',
         password: "",
         passwordRepeat: ""
       },
@@ -69,17 +69,22 @@ export default {
             body: JSON.stringify(this.form),
           }
       );
-      var token;
       var response = await fetch(request);
 
       response.json().then(data => {
-        if (data['statusNumber'] !== undefined) {
-          this.errors.add(data['message']);
-          this.$forceUpdate();
-        } else {
-          this.$store.state.token = response.headers.get("Authorization");
-          router.push("/")
+        if (response.status === 200) {
+          if (data['statusNumber'] === 2) {
+            this.errors.add(data['message']);
+            this.$forceUpdate();
+          } else {
+            localStorage.setItem('token', response.headers.get("Authorization"));
+            localStorage.setItem('user', JSON.stringify(data));
+            localStorage.setItem('authorised', 'true');
+            this.$forceUpdate();
+            router.push("/")
+          }
         }
+
       })
 
     },
@@ -97,26 +102,6 @@ export default {
       }
       this.$forceUpdate();
     }
-  },
-  async beforeMount() {
-    const request = new Request(
-        "http://localhost/sign-up",
-        {
-          method: "GET",
-        }
-    );
-
-    if (this.$store.state.token !== '') {
-      request.headers.append("Authorization", this.$store.state.token);
-    }
-
-    var response = await fetch(request);
-
-    response.json().then(data => {
-      if (data['statusNumber'] !== 3) {
-        router.push("/")
-      }
-    })
   }
 }
 </script>

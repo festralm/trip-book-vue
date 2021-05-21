@@ -17,11 +17,6 @@
 <script>
 export default {
   name: "AnonymousNavbar",
-  props: {
-    user: {
-      type: Object
-    },
-  },
   data() {
     return {
       isDisplayed: 'none',
@@ -35,6 +30,9 @@ export default {
         this.isDisplayed = 'none';
       }
     }
+  },
+  beforeDestroy() {
+    this.isDisplayed = 'none';
   }
 }
 </script>

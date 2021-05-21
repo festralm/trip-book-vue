@@ -12,11 +12,11 @@
       <b-col class="col-lg-3 pt-2">
         <button class="tab-button">Не хочу быть за штурвалом</button>
       </b-col>
-      <div class="offset-lg-2 col-lg-1 " v-if="$store.state.authorised" >
+      <div class="offset-lg-2 col-lg-1 " v-if="$store.state.authorised">
         <UserNavbar></UserNavbar>
       </div>
       <div class="offset-lg-2 col-lg-1 " v-else>
-        <AnonymousNavbar :user="user"/>
+        <AnonymousNavbar></AnonymousNavbar>
       </div>
     </b-row>
   </div>
@@ -30,9 +30,8 @@ export default {
   components: {UserNavbar, AnonymousNavbar},
   data() {
     return {
-      user: {}
     }
-  }
+  },
 }
 </script>
 
@@ -41,7 +40,7 @@ export default {
   font-size: 18px;
   font-weight: 350;
   background: none;
-  width: 100% ;
+  width: 100%;
 }
 
 .tab-button:hover {
@@ -74,11 +73,14 @@ export default {
 
 .my-dropdown-toggle {
   right: 50px;
-  background: #e9d6d6;
   border-radius: 50%;
   border: #cbbcbc solid 1px;
   width: 50px;
   height: 45px;
+}
+.my-dropdown-toggle:hover {
+  background: #e9d6d6;
+
 }
 
 .dropdown-content a:hover {
