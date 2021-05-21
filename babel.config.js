@@ -2,7 +2,7 @@ module.exports = {
   presets: [
     '@vue/cli-plugin-babel/preset'
   ],
-  devServer: {
-    proxy: "http://localhost"
-  }
+  // devServer: {
+  //   proxy: "http://localhost"
+  // }
 }
