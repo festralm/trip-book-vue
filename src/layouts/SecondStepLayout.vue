@@ -1,17 +1,17 @@
 <template>
   <div class="rent" id="rent">
-    <div class="left">
+    <div v-if="$store.state.transportForm['type'] === 1" class="left">
       <div class="text">
-        <p v-if="type === 1" class="name ">Вы планируете сдавать машину с водителем или без водителя?</p>
+        <p class="name ">Вы планируете сдавать машину с водителем или без водителя?</p>
       </div>
     </div>
     <div class="right">
-      <div class="types">
-        <b-button @click="choose(1)" v-bind:class="{chosen: firstChosen}" variant="outline-secondary"
+      <div v-if="$store.state.transportForm['type'] === 1" class="types">
+        <b-button @click="choose(true)" v-bind:class="{chosen: $store.state.transportForm['withDriver']}" variant="outline-secondary"
                   class="my-button my-3 text-center">
           С водителем
         </b-button>
-        <b-button @click="choose(2)" v-bind:class="{chosen: secondChosen}" variant="outline-secondary"
+        <b-button @click="choose(false)" v-bind:class="{chosen: !$store.state.transportForm['withDriver']}" variant="outline-secondary"
                   class="my-button  my-3 text-center">
           Без водителя
         </b-button>
@@ -29,30 +29,13 @@
 <script>
 export default {
   name: "SecondStepLayout",
-  props: [
-      'type'
-  ],
   data() {
     return {
-      firstChosen: true,
-      secondChosen: false,
     }
   },
   methods: {
-    choose(num) {
-      this.firstChosen = false;
-      this.secondChosen = false;
-
-      switch (num) {
-        case 1:
-          this.firstChosen = true;
-          this.$emit('chosen', 1)
-          break;
-        case 2:
-          this.secondChosen = true;
-          this.$emit('chosen', 2)
-          break;
-      }
+      choose(withDriver) {
+      this.$store.state.transportForm['withDriver'] = withDriver;
     }
   }
 }

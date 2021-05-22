@@ -2,17 +2,15 @@
   <div class="rent" id="rent">
     <div class="left">
       <div class="text">
-        <p class="name ">Укажите, где можно забрать автомобиль</p>
+        <p class="name ">Осталось только уточнить цену</p>
       </div>
     </div>
     <div class="right">
-      <div class="address ">
-        <b-input class="address-input my-4 py-2" v-model="form.country" placeholder="Страна"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.region" placeholder="Регион"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.city" placeholder="Город"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.street" placeholder="Улица"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.building" placeholder="Дом"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.literal" placeholder="Литреал"></b-input>
+      <div class="my-input ">
+        <b-input class="price-input my-4 py-2" v-model="$store.state.transportForm['price']"
+                 placeholder="Введите цену" type="number" ></b-input>
+        <b-select class="form-select hour-input" v-model="$store.state.transportForm['forHour']"
+                  :options="this.options"></b-select>
       </div>
       <div class="footer">
         <div class="footer-content m-4">
@@ -26,24 +24,21 @@
 
 <script>
 export default {
-  name: "FifthStepLayout",
+  name: "SeventhStepLayout",
   data() {
     return {
-      form: {
-        country: '',
-        region: '',
-        city: '',
-        street: '',
-        building: '',
-        literal: ''
+      options: {
+        null: "Выберите период",
+        true: "В час",
+        false: "В сутки",
       }
     }
   }
+
 }
 </script>
 
 <style scoped>
-
 
 .rent {
   height: 722px;
@@ -64,7 +59,7 @@ export default {
 }
 .text {
   width: 70%;
-  margin: 270px auto auto;
+  margin: 320px auto auto;
 
 }
 .name {
@@ -81,9 +76,9 @@ export default {
 .footer {
   width: 100%;
 }
-.address {
-  margin: 150px auto 144px auto;
-  width: 70%;
+.my-input {
+  margin: 300px auto 262px auto;
+  width: 30%;
 
 }
 </style>

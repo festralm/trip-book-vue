@@ -1,13 +1,14 @@
 <template>
   <div class="rent" id="rent">
-    <div class="left">
+    <div v-if="$store.state.transportForm['type'] === 1" class="left">
       <div class="text">
-        <p v-if="type === 1" class="name ">Автомобиль какой марки вы желаете сдать в аренду?</p>
+        <p class="name ">Автомобиль какой марки вы желаете сдать в аренду?</p>
       </div>
     </div>
     <div class="right">
-      <div class="brands ">
-          <b-select class="form-select " @change="choose()" v-model="brand" :options="options"></b-select>
+      <div v-if="$store.state.transportForm['type'] === 1" class="brands ">
+          <b-select class="form-select " v-model="$store.state.transportForm['brand']"
+                    :options="$store.state.transportForm['options']"></b-select>
       </div>
       <div class="footer">
         <div class="footer-content m-4">
@@ -22,19 +23,11 @@
 <script>
 export default {
   name: "ThirdStepLayout",
-  props: [
-    'type',
-  ],
   data() {
     return {
-      brand: '',
-      options: []
     }
   },
   methods: {
-    choose() {
-      this.$emit('chosen', this.brand)
-    }
   },
   async beforeMount() {
     var request = new Request(
@@ -50,7 +43,8 @@ export default {
     var response = await fetch(request);
     response.json().then(data => {
       console.log(data)
-      this.options = data
+      this.$store.state.transportForm['options'] = data
+      this.$forceUpdate()
     })
   }
 }

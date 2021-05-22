@@ -1,13 +1,14 @@
 <template>
   <div class="rent" id="rent">
-    <div class="left">
+    <div v-if="$store.state.transportForm['brand'] === 'BMW'" class="left">
       <div class="text">
         <p class="name ">Выберите модель вашего автомобиля</p>
       </div>
     </div>
     <div class="right">
-      <div class="brands ">
-        <b-select class="form-select " @change="choose()" v-model="model" :options="options"></b-select>
+      <div v-if="$store.state.transportForm['brand'] === 'BMW'"  class="brands ">
+        <b-select class="form-select " v-model="$store.state.transportForm['model']"
+                  :options="$store.state.transportForm['modelOptions']"></b-select>
       </div>
       <div class="footer">
         <div class="footer-content m-4">
@@ -27,17 +28,11 @@ export default {
   ],
   data() {
     return {
-      model: '',
-      options: []
     }
   },
   methods: {
-    choose() {
-      this.$emit('chosen', this.model)
-    }
   },
   async beforeMount() {
-    if (this.brand === 'BMW') {
       var request = new Request(
           "http://localhost/transports/bmw-models",
           {
@@ -45,15 +40,15 @@ export default {
           }
       );
       if (this.$store.state.token !== null) {
-        console.log(this.$store.state.token)
         request.headers.append("Authorization", this.$store.state.token);
       }
       var response = await fetch(request);
+      console.log(response);
       response.json().then(data => {
-        console.log(data)
-        this.options = data
+        console.log(data);
+        this.$store.state.transportForm['modelOptions'] = data;
+        this.$forceUpdate()
       })
-    }
   }
 }
 </script>

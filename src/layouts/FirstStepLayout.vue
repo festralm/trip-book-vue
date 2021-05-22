@@ -65,7 +65,7 @@ export default {
   name: "FirstStepLayout",
   data() {
     return {
-      firstChosen: true,
+      firstChosen: false,
       secondChosen: false,
       thirdChosen: false,
       forthChosen: false,
@@ -81,34 +81,35 @@ export default {
       this.forthChosen = false;
       this.fifthChosen = false;
       this.sixthChosen = false;
+      this.$store.state.transportForm['type'] = num;
 
+      this.chooseButton(num);
+    },
+    chooseButton(num) {
       switch (num) {
         case 1:
           this.firstChosen = true;
-          this.$emit('chosen', 1)
           break;
         case 2:
           this.secondChosen = true;
-          this.$emit('chosen', 2)
           break;
         case 3:
           this.thirdChosen = true;
-          this.$emit('chosen', 3)
           break;
         case 4:
           this.forthChosen = true;
-          this.$emit('chosen', 4)
           break;
         case 5:
           this.fifthChosen = true;
-          this.$emit('chosen', 5)
           break;
         case 6:
           this.sixthChosen = true;
-          this.$emit('chosen', 6)
           break;
       }
     }
+  },
+  beforeMount() {
+    this.chooseButton(this.$store.state.transportForm['type'])
   }
 }
 </script>

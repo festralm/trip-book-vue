@@ -2,17 +2,13 @@
   <div class="rent" id="rent">
     <div class="left">
       <div class="text">
-        <p class="name ">Укажите, где можно забрать автомобиль</p>
+        <p class="name ">Теперь выберите название для вашего объявления</p>
       </div>
     </div>
     <div class="right">
-      <div class="address ">
-        <b-input class="address-input my-4 py-2" v-model="form.country" placeholder="Страна"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.region" placeholder="Регион"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.city" placeholder="Город"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.street" placeholder="Улица"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.building" placeholder="Дом"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.literal" placeholder="Литреал"></b-input>
+      <div class="my-input ">
+        <b-input class="address-input my-4 py-2" v-model="$store.state.transportForm['name']"
+                 placeholder="Введите название" v-bind:value="$store.state.transportForm['name']"></b-input>
       </div>
       <div class="footer">
         <div class="footer-content m-4">
@@ -26,24 +22,11 @@
 
 <script>
 export default {
-  name: "FifthStepLayout",
-  data() {
-    return {
-      form: {
-        country: '',
-        region: '',
-        city: '',
-        street: '',
-        building: '',
-        literal: ''
-      }
-    }
-  }
+  name: "SixthStepLayout",
 }
 </script>
 
 <style scoped>
-
 
 .rent {
   height: 722px;
@@ -81,8 +64,8 @@ export default {
 .footer {
   width: 100%;
 }
-.address {
-  margin: 150px auto 144px auto;
+.my-input {
+  margin: 300px auto 324px auto;
   width: 70%;
 
 }

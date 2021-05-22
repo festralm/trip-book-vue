@@ -3,21 +3,27 @@
     <zero-step-layout @next="incrementStep()"></zero-step-layout>
   </div>
   <div v-else-if="step === 1">
-    <first-step-layout @chosen="typeChosen" @next="incrementStep()" @back="decrementStep()"></first-step-layout>
+    <first-step-layout @next="incrementStep()" @back="decrementStep()"></first-step-layout>
   </div>
   <div v-else-if="step === 2">
-    <second-step-layout @chosen="driverChosen" :type="type" @next="incrementStep()" @back="decrementStep()"></second-step-layout>
+    <second-step-layout :type="type" @next="incrementStep()" @back="decrementStep()"></second-step-layout>
   </div>
   <div v-else-if="step === 3">
-    <third-step-layout @chosen="brandChosen" :type="type" @next="incrementStep()" @back="decrementStep()"></third-step-layout>
+    <third-step-layout :type="type" @next="incrementStep()" @back="decrementStep()"></third-step-layout>
   </div>
   <div v-else-if="step === 4">
-    <forth-step-layout  @chosen="modelChosen" :brand="form.brand"  @next="incrementStep()" @back="decrementStep()"></forth-step-layout>
+    <forth-step-layout  @next="incrementStep()" @back="decrementStep()"></forth-step-layout>
   </div>
   <div v-else-if="step === 5">
-    <fifth-step-layout  @chosen="modelChosen" :brand="form.brand"  @next="incrementStep()" @back="decrementStep()"></fifth-step-layout>
+    <fifth-step-layout  @next="incrementStep()" @back="decrementStep()"></fifth-step-layout>
   </div>
   <div v-else-if="step === 6">
+    <sixth-step-layout @next="incrementStep()" @back="decrementStep()"></sixth-step-layout>
+  </div>
+  <div v-else-if="step === 7">
+    <seventh-step-layout @next="incrementStep()" @back="decrementStep()"></seventh-step-layout>
+  </div>
+  <div v-else-if="step === 8">
     <final-step-layout ></final-step-layout>
   </div>
 </template>
@@ -31,47 +37,30 @@ import ForthStepLayout from "@/layouts/ForthStepLayout";
 import FifthStepLayout from "@/layouts/FifthStepLayout";
 import FinalStepLayout from "@/layouts/FinalStepLayout";
 import router from "@/router";
+import SixthStepLayout from "@/layouts/SixthStepLayout";
+import SeventhStepLayout from "@/layouts/SeventhStepLayout";
 export default {
   name: "RentTransportLayout",
   components: {
+    SeventhStepLayout,
+    SixthStepLayout: SixthStepLayout,
     FinalStepLayout,
     FifthStepLayout, ForthStepLayout, ThirdStepLayout, SecondStepLayout, FirstStepLayout, ZeroStepLayout},
   data() {
     return {
       step: 0,
       type: 1,
-      form: {
-        withDriver: true,
-        brand: '',
-        model: ''
-      }
     }
   },
   methods: {
     incrementStep() {
       this.step++;
-      if (this.step === 6) {
+      if (this.step === 8) {
         this.createTransport()
       }
     },
     decrementStep() {
       this.step--;
-    },
-    typeChosen(num) {
-      this.type = num;
-    },
-    driverChosen(num) {
-      if (num === 1) {
-        this.form.withDriver = true
-      } else {
-        this.form.withDriver = false;
-      }
-    },
-    brandChosen(brand) {
-      this.form.brand = brand;
-    },
-    modelChosen(model) {
-      this.form.model = model;
     },
     async createTransport() {
       const request = new Request(
@@ -81,7 +70,7 @@ export default {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify(this.form),
+            body: JSON.stringify(this.$store.state.transportForm),
           }
       );
       if (this.$store.state.token !== null) {
