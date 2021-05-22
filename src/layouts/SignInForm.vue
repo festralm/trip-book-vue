@@ -63,7 +63,6 @@ export default {
           }
       );
       var response = await fetch(request);
-
       response.json().then(data => {
         if (response.status === 200) {
           if (data['statusNumber'] === 1) {

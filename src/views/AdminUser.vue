@@ -1,4 +1,5 @@
 <template>
+
   <user-for-admin v-bind:user=user :key="user.id"></user-for-admin>
 </template>
 

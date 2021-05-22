@@ -7,6 +7,7 @@
 <script>
 import axios from "axios";
 import BackgroundLayout from "@/layouts/BackgroundLayout";
+import router from "@/router";
 
 export default {
   name: "DefaultLayout",
@@ -15,29 +16,39 @@ export default {
     }
   },
   async beforeMount() {
-    console.log(Object.entries(localStorage));
-    var requestDefault = new Request(
+    console.log(Object.keys(localStorage))
+
+    var request = new Request(
         "http://localhost/",
         {
           method: "GET",
         }
     );
-    if (this.$store.state.token !== '') {
-      requestDefault.headers.append("Authorization", this.$store.state.token);
+    if (this.$store.state.token !== null) {
+      console.log(this.$store.state.token);
+      request.headers.append("Authorization", this.$store.state.token);
     }
-    var responseDefault = await fetch(requestDefault);
-    responseDefault.json().then(data => {
-      if (data['statusNumber'] !== 4) {
-        if (this.$store.state.token !== '') {
-          localStorage.removeItem('token');
-          localStorage.removeItem('user');
-          localStorage.removeItem('authorised');
+    var response = await fetch(request);
+    console.log(response);
+    if (response.status === 200) {
+      response.json().then(data => {
+        if (data['statusNumber'] !== 4) {
+          if (this.$store.state.token !== '') {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('authorised');
+          }
+        } else {
+          localStorage.setItem('user', JSON.stringify(data['body']));
+          localStorage.setItem('authorised', 'true');
+          router.push("/")
         }
-      } else {
-        localStorage.setItem('user', JSON.stringify(data['body']));
-        localStorage.setItem('authorised', 'true');
-      }
-    })
+      })
+    } else {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('authorised');
+    }
   }
 }
 </script>

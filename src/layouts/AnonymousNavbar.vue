@@ -9,12 +9,14 @@
       <a class="my-dropdown-item py-2" href="/sign-in">Войти</a>
       <a class="my-dropdown-item py-2" href="/sign-up" >Зарегистрироваться</a>
       <hr>
-      <a class="my-dropdown-item py-2" href="/rent-transport">Сдать транспорт в аренду</a>
+      <a class="my-dropdown-item py-2" href="/sign-in">Сдать транспорт в аренду</a>
     </div>
   </b-col>
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   name: "AnonymousNavbar",
   data() {
