@@ -1,23 +1,31 @@
 <template>
   <div class="default">
-    <router-view/>
+    <my-menu></my-menu>
+    <router-view @updateMenu="updateMenu()"/>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import BackgroundLayout from "@/layouts/BackgroundLayout";
-import router from "@/router";
 
+import MyMenu from "@/layouts/MyMenu";
 export default {
   name: "DefaultLayout",
+  components: {MyMenu},
   data() {
     return {
     }
   },
+  methods: {
+    updateMenu() {
+      this.$store.state.authorised = 'true';
+      console.log('update')
+      this.$store.state.menuShow = false;
+      this.$forceUpdate()
+    }
+  },
   async beforeMount() {
-    console.log(Object.keys(localStorage))
-
+    this.$store.state.menuShow = false;
+    localStorage.clear();
     var request = new Request(
         "http://localhost/",
         {
@@ -25,23 +33,29 @@ export default {
         }
     );
     if (this.$store.state.token !== null) {
-      console.log(this.$store.state.token);
       request.headers.append("Authorization", this.$store.state.token);
     }
     var response = await fetch(request);
-    console.log(response);
     if (response.status === 200) {
+      console.log(response);
       response.json().then(data => {
-        if (data['statusNumber'] !== 4) {
-          if (this.$store.state.token !== '') {
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('authorised');
+        const statusNumber = data['statusNumber'];
+        if (statusNumber !== 4) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          localStorage.removeItem('authorised');
+
+          if (statusNumber === 9) {
+            //TODO blocked
+          } else if (statusNumber === 7) {
+            //TODO deleted
+          } else if (statusNumber === 6) {
+            //TODO not found
           }
         } else {
+          localStorage.setItem('token', this.$store.state.token);
           localStorage.setItem('user', JSON.stringify(data['body']));
           localStorage.setItem('authorised', 'true');
-          router.push("/")
         }
       })
     } else {
@@ -49,6 +63,7 @@ export default {
       localStorage.removeItem('user');
       localStorage.removeItem('authorised');
     }
+    this.$forceUpdate();
   }
 }
 </script>
@@ -71,7 +86,6 @@ time, mark, audio, video {
   padding: 0;
   border: 0;
   font-size: 100%;
-  font: inherit;
   vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
@@ -101,6 +115,11 @@ button {
   background-color: transparent;
   padding: 0;
   margin: 0;
+}
+
+a {
+  color: black;
+  text-decoration: none;
 }
 
 </style>

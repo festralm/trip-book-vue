@@ -1,9 +1,9 @@
 <template>
-<sign-up-form/>
+<sign-up-form  @updateMenu="$emit('updateMenu')" />
 </template>
 
 <script>
-import SignUpForm from "../layouts/SignUpForm";
+import SignUpForm from "../components/SignUpForm";
 export default {
   name: "SignUp",
   components: {SignUpForm}

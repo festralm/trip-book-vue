@@ -1,16 +1,21 @@
 <template>
-  <b-container class="mt-5">
-    <b-row class="justify-content-center auth-layout">
-      <b-col lg="4">
-        <router-view />
-      </b-col>
-    </b-row>
-  </b-container>
+  <div class="my-image">
+    <b-container class=" mt-3">
+      <b-row class=" justify-content-center auth-layout">
+        <b-col lg="4">
+          <router-view  @updateMenu="$emit('updateMenu')" />
+        </b-col>
+      </b-row>
+    </b-container>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "AuthLayout"
+  name: "AuthLayout",
+  methods: {
+
+  }
 }
 </script>
 
@@ -18,16 +23,26 @@ export default {
 .auth-layout {
 }
 .sign-in {
+  margin-top: 100px;
   border-radius: 4%;
   background-color: white;
 }
 .errors {
-color: red;
+  color: red;
 }
 
 .google {
   flex: 0 1 0 !important;
   width: 20px;
   float: left;
+}
+.my-image {
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: url("../assets/background.jpg") no-repeat;
+  background-size: cover;
+  z-index: -1;
+  height: 700px;
 }
 </style>

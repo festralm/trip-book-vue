@@ -11,5 +11,9 @@ export default {
   components: {
     HomeLayout
   },
+  beforeMount() {
+    this.$store.state.menuNotDriver = true;
+    this.$store.state.menuDriver = false;
+  }
 }
 </script>

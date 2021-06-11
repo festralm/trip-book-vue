@@ -20,7 +20,6 @@
           </b-col>
         </b-row>
       </b-form>
-
       <div class="mt-5">
         <div class="main-text">
           <p class="m-0 pt-5">Поиск</p>
@@ -28,6 +27,7 @@
         </div>
         <div class="pt-4">
           <b-button variant="outline-secondary">Искать по объявлениям</b-button>
+          <!--          todo transports search-->
         </div>
       </div>
     </div>
@@ -72,7 +72,7 @@ export default {
           }
       );
       console.log(this.form)
-      if (this.$store.state.token !== '') {
+      if (this.$store.state.token !== null) {
         request.headers.append("Authorization", this.$store.state.token);
       }
       var response = await fetch(request);
@@ -80,6 +80,7 @@ export default {
       response.text().then(data =>{
         this.$store.state.users = JSON.parse(data);
       })
+      console.log(this.$store.state.users)
     }
   }
 
