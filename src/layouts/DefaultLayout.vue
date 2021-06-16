@@ -8,6 +8,7 @@
 <script>
 
 import MyMenu from "@/layouts/MyMenu";
+import router from "@/router";
 export default {
   name: "DefaultLayout",
   components: {MyMenu},
@@ -25,7 +26,6 @@ export default {
   },
   async beforeMount() {
     this.$store.state.menuShow = false;
-    localStorage.clear();
     var request = new Request(
         "http://localhost/",
         {
@@ -37,7 +37,6 @@ export default {
     }
     var response = await fetch(request);
     if (response.status === 200) {
-      console.log(response);
       response.json().then(data => {
         const statusNumber = data['statusNumber'];
         if (statusNumber !== 4) {
@@ -46,11 +45,11 @@ export default {
           localStorage.removeItem('authorised');
 
           if (statusNumber === 9) {
-            //TODO blocked
+            router.push("/error/banned");
           } else if (statusNumber === 7) {
-            //TODO deleted
+            router.push("/error/deleted");
           } else if (statusNumber === 6) {
-            //TODO not found
+            router.push("/error/default");
           }
         } else {
           localStorage.setItem('token', this.$store.state.token);

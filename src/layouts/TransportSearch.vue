@@ -1,31 +1,25 @@
 <template>
   <div class="image py-5">
     <div class="search-wrapper ">
-      <b-form @submit.prevent="">
-        <b-row class="px-5 pt-2">
-          <b-col class="col-4 p-0 m-0 left">
-            <p class="p-0 m-0 ps-2">Местоположение</p>
-            <b-form-input v-model="form.address" autocomplete="off" @click="showOptions()"
-                          class="p-2 my-input" placeholder="Где будем искать?"></b-form-input>
-            <div class="places" hidden>
-              <div class="option"></div>
-            </div>
-          </b-col>
-          <b-col class="col-3 p-0 m-0 middle">
-            <p class="p-0 m-0 ps-2">Начало</p>
-            <b-form-input v-model="form.start" type="date" class="py-2 my-input date"></b-form-input>
-          </b-col>
-          <b-col class="col-3 p-0 m-0 right">
-            <p class="p-0 m-0 ps-2">Конец</p>
-            <b-form-input v-model="form.end" type="date" class="p-2 my-input date"></b-form-input>
-          </b-col>
-          <b-col class="col-1 pt-2 offset-1">
-            <div class="button-wrapper">
-              <img @click="search()" class="search-button" src="../assets/search.svg" />
-            </div>
-          </b-col>
-          <!-- todo change search (location, dates)-->
-        </b-row>
+      <b-form @submit.prevent="" class="search-container">
+        <div>
+          <p class="p-0 m-0 ps-2">Местоположение</p>
+          <b-form-input v-model="form.address" autocomplete="off" @click="showOptions()"
+                        class="p-2 my-input" placeholder="Где будем искать?"></b-form-input>
+        </div>
+        <div>
+          <p class="p-0 m-0 ps-2">Начало</p>
+          <b-form-input v-model="form.start" type="date" class="py-2 my-input date"></b-form-input>
+        </div>
+        <div>
+          <p class="p-0 m-0 ps-2">Конец</p>
+          <b-form-input v-model="form.end" type="date" class="p-2 my-input date"></b-form-input>
+        </div>
+        <div>
+          <div class="button-wrapper">
+            <img @click="search()" class="search-button" src="../assets/search.svg" />
+          </div>
+        </div>
       </b-form>
     </div>
     <div class="advices">
@@ -40,13 +34,6 @@ export default {
   name: "TransportSearch",
   data() {
     return {
-      brandOptions: [],
-      modelOptions: [],
-      options: {
-        null: "Период",
-        true: "В час",
-        false: "В сутки",
-      },
       form: {
         address: null,
         start: null,
@@ -55,7 +42,6 @@ export default {
     }
   },
   methods: {
-
     async search() {
       const request = new Request(
           "http://localhost/transports/search",
@@ -94,13 +80,17 @@ export default {
       })
     }
   },
-
-  async beforeMount() {
-  }
 }
 </script>
 
 <style scoped>
+
+.search-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  padding-top: 5px;
+}
 
 .search-wrapper {
   font-family: 'Roboto Mono', monospace;
@@ -118,9 +108,12 @@ export default {
   cursor: pointer;
   border: #cbbcbc solid 1px;
   border-radius: 50px;
+  margin-top: 10px;
+  margin-left: 40px;
 }
 .button-wrapper:hover {
-  background-color: #e9d6d6;
+  border: 2px solid #b8a7a7;
+  background-color: #eedcdc;
 }
 
 .search-button {

@@ -1,5 +1,4 @@
 <template>
-
   <home-layout></home-layout>
 </template>
 

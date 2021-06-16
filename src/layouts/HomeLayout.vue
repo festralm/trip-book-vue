@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="home">
     <transport-search></transport-search>
     <transports></transports>
     <router-view></router-view>
@@ -18,5 +18,7 @@ export default {
 </script>
 
 <style>
-
+  .home {
+    margin-top: 70px;
+  }
 </style>
