@@ -36,13 +36,14 @@ export default {
   width: 20px;
   float: left;
 }
+
 .my-image {
   top: 0;
   left: 0;
   width: 100%;
   background: url("../assets/background.jpg") no-repeat;
   background-size: cover;
-  z-index: -1;
-  height: 700px;
+  margin-top: 70px;
+  height: 651px;
 }
 </style>

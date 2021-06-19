@@ -8,9 +8,7 @@
     <hr>
     <a href="/rent-transport#rent">Сдать транспорт в аренду</a>
     <a href="/profile">Мой профиль</a>
-    <div v-if="JSON.parse($store.state.user)['role'] === 'ADMIN'">
-      <a @click="getAdminPage()">Страница администратора</a>
-    </div>
+    <a v-if="$store.state.isAdmin === 'true'" @click="getAdminPage()">Страница администратора</a>
     <hr>
     <a href="/help">Помощь</a>
     <a @click="logout()" href="#">Выйти</a>

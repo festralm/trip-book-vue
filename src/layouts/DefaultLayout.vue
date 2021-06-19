@@ -41,26 +41,26 @@ export default {
         const statusNumber = data['statusNumber'];
         if (statusNumber !== 4) {
           localStorage.removeItem('token');
-          localStorage.removeItem('user');
           localStorage.removeItem('authorised');
+          localStorage.removeItem('isAdmin');
 
-          if (statusNumber === 9) {
+          if (statusNumber === 2) {
             router.push("/error/banned");
-          } else if (statusNumber === 7) {
+          } else if (statusNumber === 3) {
             router.push("/error/deleted");
-          } else if (statusNumber === 6) {
+          } else if (statusNumber === 4) {
             router.push("/error/default");
           }
         } else {
           localStorage.setItem('token', this.$store.state.token);
-          localStorage.setItem('user', JSON.stringify(data['body']));
           localStorage.setItem('authorised', 'true');
+          localStorage.setItem('isAdmin', String(data['body']['role'] === 'ADMIN'));
         }
       })
     } else {
       localStorage.removeItem('token');
-      localStorage.removeItem('user');
       localStorage.removeItem('authorised');
+      localStorage.removeItem('isAdmin');
     }
     this.$forceUpdate();
   }

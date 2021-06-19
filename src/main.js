@@ -21,7 +21,7 @@ const store = new Vuex.Store({
     menuNotDriver: false,
     token: localStorage.getItem('token'),
     authorised: localStorage.getItem('authorised'),
-    user: localStorage.getItem('user'),
+    isAdmin: localStorage.getItem('isAdmin'),
     users: [],
     transportForm: {
       'type': 1,

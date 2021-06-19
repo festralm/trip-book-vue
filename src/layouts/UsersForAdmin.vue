@@ -1,57 +1,85 @@
 <template>
   <div class="users-for-admin m-5 p-5 ">
-    <div class="names-container">
-      <b-row class="row-container text-center">
-        <b-col class="my-button col-2 p-2 fw-bold">
-          <div> {{names.photo}}</div>
-        </b-col>
-        <b-col class="my-button  col-1 p-2 fw-bold">
-          <div> {{names.id}}</div>
-        </b-col>
-        <b-col class="my-button col-2 p-2 fw-bold">
-          <div> {{names.email}}</div>
-        </b-col>
-        <b-col class="my-button col-2 p-2 fw-bold">
-          <div> {{names.isBlocked}}</div>
-        </b-col>
-        <b-col class="my-button col-2 p-2 fw-bold">
-          <div> {{names.isDeleted}}</div>
-        </b-col>
-        <b-col class="my-button col-3 p-2 fw-bold">
-          <div> {{names.role}}</div>
-        </b-col>
-      </b-row>
+    <div class="sort-container pb-5">
+      <div ><b-select @change="sort()" class="px-3 my-select" v-model="sortType" :options="sortOptions"></b-select></div>
+      <div ><b-select @change="sort()" class="px-3 my-select" v-model="sortObject" :options="objectOptions"></b-select></div>
     </div>
-    <user-for-admin-search v-for="(user, key) in $store.state.users" v-bind:user="user" :key="key"></user-for-admin-search>
+    <div class="users-container">
+      <div class="user pt-3 " v-for="(user, key) in $store.state.users" v-bind:user="user" :key="key">
+        <img @click="goToUsersPage(user.id)" class="image pb-2" width="200px" :src="require(`../assets/${user.photoUrl}`)"/>
+        <div @click="goToUsersPage(user.id)" class="text-container text-center">
+          <p class="mb-1">ID: {{user.id}}</p>
+          <p >{{user.email}}</p>
+        </div>
+      </div>
+    </div>
   </div>
-<!--  todo empty users list-->
+  <!--  todo empty users list-->
 </template>
 
 <script>
-import router from "@/router";
-import UserForAdminSearch from "@/components/UserForAdminSearch";
+
+import router from "../router";
 
 export default {
   name: "UsersForAdmin",
-  components: {UserForAdminSearch},
   data() {
     return {
-      names: {
-        id: 'ID',
-        photo: 'Фото',
-        phoneNumber: 'Номер телефона',
-        email: 'Email',
-        isBlocked: 'Заблокирован',
-        isDeleted: 'Удален',
-        role: 'Статус'
+      sortType: null,
+      sortOptions: [
+        { value: null, text: "По умолчанию"},
+        { value: true, text: "По возрастанию"},
+        { value: false, text: "По убыванию"},
+      ],
+      sortObject: null,
+      objectOptions: [
+        { value: null, text: "Сортировать по"},
+        { value: true, text: "ID"},
+        { value: false, text: "Email"},
+      ]
+    }
+  },
+  methods: {
+    sort() {
+      if (this.sortType !== null && this.sortObject !== null) {
+        if (this.sortObject === true) {
+          var idComparator = function (a, b) {
+            return a.id - b.id;
+          };
+          if (this.sortType === true) {
+            this.$store.state.users =  this.$store.state.users.sort(idComparator)
+          } else {
+            this.$store.state.users =  this.$store.state.users.sort((a, b) =>  -idComparator(a, b))
+          }
+        } else {
+          var emailComparator = function (a, b) {
+            return a.email > b.email ? 1
+                : a.email < b.email ? -1
+                : 0;
+          };
+          if (this.sortType === true) {
+            this.$store.state.users =  this.$store.state.users.sort(emailComparator)
+          } else {
+            this.$store.state.users =  this.$store.state.users.sort((a, b) =>-emailComparator(a, b))
+          }
+        }
       }
+      console.log(this.$store.state.users)
+      this.$forceUpdate();
+    },
+    goToUsersPage(id) {
+      router.push({path: `/admin/users/${id}`})
     }
   },
   async beforeMount() {
     const request = new Request(
-        "http://localhost/admin/users",
+        "http://localhost/admin/search",
         {
-          method: "GET"
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({}),
         }
     );
     if (this.$store.state.token !== null) {
@@ -60,24 +88,56 @@ export default {
     var response = await fetch(request);
     if (response.status === 200) {
       response.json().then(data => {
-        console.log(data[0])
         this.$store.state.users = data;
       })
     }
-
+    //todo errors
   }
 }
 </script>
 
 <style scoped>
 
-.my-button {
-  border: 1px solid #bebebe;
-  min-height: 40px;
+.sort-container {
+  display: flex;
+  font-family: 'Roboto Mono', monospace;
+  font-size: 18px;
+  justify-content: space-evenly;
 }
 
-.names-container {
-
+.my-select {
+  width: 230px;
+  border: 2px solid #eedcdc;
+  border-radius: 20px;
+  cursor: pointer;
 }
 
+.my-select:hover {
+  border: 2px solid #b8a7a7;
+}
+
+.users-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  width: 1120px;
+  margin: auto;
+}
+
+.user {
+  margin: 10px 40px 10px 40px;
+}
+
+.image {
+  cursor: pointer;
+}
+
+.text-container {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  width: 200px;
+}
 </style>
+

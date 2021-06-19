@@ -5,7 +5,7 @@
         <div>
           <p class="p-0 m-0 ps-2">Местоположение</p>
           <b-form-input v-model="form.address" autocomplete="off" @click="showOptions()"
-                        class="p-2 my-input" placeholder="Где будем искать?"></b-form-input>
+                        class="p-2 my-input left" placeholder="Где будем искать?"></b-form-input>
         </div>
         <div>
           <p class="p-0 m-0 ps-2">Начало</p>
@@ -43,6 +43,7 @@ export default {
   },
   methods: {
     async search() {
+      //todo
       const request = new Request(
           "http://localhost/transports/search",
           {
@@ -143,13 +144,13 @@ export default {
   border-left: 1px solid #e0e0e0;
 }
 
-.left .my-input {
+.left  {
   border-left: none;
 }
 
 .advices {
   margin-left: 180px;
-  margin-top: 280px;
+  margin-top: 300px;
   font-family: 'Roboto Mono', monospace;
   color: white;
 

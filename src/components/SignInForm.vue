@@ -4,12 +4,8 @@
     <b-form id="form" @submit.prevent="signIn()" >
       <p v-if="error" class="errors text-center py-1">
         {{ error }}
-        <!--        todo all errors!-->
-        <!--        todo email error-->
-        <!--        todo empty error-->
       </p>
       <b-form-input class="my-2" required type="email" v-model="form.email" name="username" placeholder="Email"></b-form-input>
-
       <b-form-input minlength="8" class="my-2" required type="password" v-model="form.password" name="password" placeholder="Пароль"></b-form-input>
       <b-button class="button my-2 w-100" variant="primary" type="submit">Войти</b-button>
       <p class=" text-center m-0 p-1"><router-link to="/sign-up" class="link">Еще не зарегистрированы?</router-link></p>
@@ -32,6 +28,7 @@
               ></g>
           </svg>
         </div>
+<!--        todo-->
         <a>Продолжить с Google</a>
       </b-button>
     </b-form>
@@ -66,15 +63,12 @@ export default {
           }
       );
       var response = await fetch(request);
-      console.log(response)
       response.json().then(data => {
         if (response.status === 200) {
-          if (data['statusNumber'] === 1) {
+          if (data['statusNumber'] === 5) {
             this.error = data['message'];
           } else {
             localStorage.setItem('token', response.headers.get("Authorization"));
-            // todo check if user is necessary
-            localStorage.setItem('user', JSON.stringify(data));
             localStorage.setItem('authorised', 'true');
             router.push("/");
             this.$emit('updateMenu');
