@@ -11,10 +11,17 @@
 </template>
 
 <script>
+import router from "../router";
+
 export default {
   name: "AuthLayout",
   methods: {
 
+  },
+  beforeMount() {
+    if (this.$store.state.authorised === 'true') {
+      router.push("/")
+    }
   }
 }
 </script>

@@ -39,7 +39,7 @@ export default {
     if (response.status === 200) {
       response.json().then(data => {
         const statusNumber = data['statusNumber'];
-        if (statusNumber !== 4) {
+        if (statusNumber !== 7) {
           localStorage.removeItem('token');
           localStorage.removeItem('authorised');
           localStorage.removeItem('isAdmin');
@@ -61,6 +61,7 @@ export default {
       localStorage.removeItem('token');
       localStorage.removeItem('authorised');
       localStorage.removeItem('isAdmin');
+      router.push("/error/default")
     }
     this.$forceUpdate();
   }

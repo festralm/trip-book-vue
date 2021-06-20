@@ -33,7 +33,7 @@ export default {
             method: "POST",
           }
       );
-      if (this.$store.state.token !== '') {
+      if (this.$store.state.token !== null) {
         request.headers.append("Authorization", this.$store.state.token);
       }
       var response = await fetch(request);
@@ -41,8 +41,9 @@ export default {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('authorised');
-        await router.push("/sign-in");
         this.$emit('updateMenu')
+      } else {
+        router.push("/error/default")
       }
     },
     async getAdminPage() {

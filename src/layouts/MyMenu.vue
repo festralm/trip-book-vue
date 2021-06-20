@@ -1,5 +1,5 @@
 <template>
-  <div class="menu-container">
+  <div class="menu-container" v-bind:class="{fixed: $store.state.fixed}">
     <div>
       <a href="/">
         <img width="130" src="../assets/Tripbook-logo/vector/default-monochrome-black.svg">
@@ -94,6 +94,9 @@ export default {
   border-radius: 15px;
   width: 300px;
 }
+.fixed {
+  position: fixed;
+}
 
 .menu-container {
   display: flex;
@@ -102,11 +105,10 @@ export default {
   height: 70px;
   font-size: 17px;
   font-weight: 350;
-  top: 0;
-  position: fixed;
   background-color: white;
-  z-index: 100;
   width: 100%;
+  z-index: 100;
+  top: 0;
   box-shadow: 0 0 5px 1px #c4c4c4;
 }
 
