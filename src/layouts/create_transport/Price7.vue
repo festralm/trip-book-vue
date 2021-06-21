@@ -12,7 +12,7 @@
         <b-select class="form-select hour-input" v-model="$store.state.transportForm['forHour']"
                   :options="this.options"></b-select>
       </div>
-      <div class="footer">
+      <div class="my-footer">
         <div class="footer-content m-4">
           <b-button class="back" @click="$emit('back')" variant="outline-secondary">Назад</b-button>
           <b-button class="next" @click="$emit('next')" variant="secondary"
@@ -77,7 +77,7 @@ export default {
   float: right;
 }
 
-.footer {
+.my-footer {
   width: 100%;
 }
 .my-input {

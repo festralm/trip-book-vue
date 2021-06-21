@@ -8,24 +8,25 @@
     </div>
     <div class="right">
       <div class="my-input text-center">
-        <b-row class="ps-4">
-          <b-col class="col-5 start">
-            <p class="">Начало</p>
-            <b-form-input class="p-3" v-bind:min="getStartDate()" v-model="$store.state.transportForm['start']" type="date" ></b-form-input>
-          </b-col>
-<!--          todo wrong date choosing-->
-          <b-col class="offset-1 col-5 end">
-            <p class="">Конец</p>
-            <b-form-input class="p-3" v-bind:min="getFinishDate()"
-                          v-model="$store.state.transportForm['finish']" type="date" ></b-form-input>
-          </b-col>
-        </b-row>
+        <v-date-picker
+          :value="null"
+          color="red"
+          mode="dateTime"
+          :available-dates="[{
+                  start: new Date() ,
+                  end: null
+                },
+                ]"
+          is-range
+          v-model="$store.state.transportForm.range"
+          @change="setForm()"
+      />
       </div>
-      <div class="footer">
+      <div class="my-footer">
         <div class="footer-content m-4">
           <b-button class="back" @click="$emit('back')" variant="outline-secondary">Назад</b-button>
           <b-button class="next" @click="$emit('next')" variant="secondary"
-          v-bind:disabled="$store.state.transportForm.start === null || $store.state.transportForm.finish === null">
+          v-bind:disabled="$store.state.transportForm.range === null">
             Продолжить</b-button>
         </div>
       </div>
@@ -36,16 +37,12 @@
 <script>
 export default {
   name: "Dates9",
+  data() {
+    return {
+    }
+  },
   methods: {
-    getStartDate() {
-      var now = new Date();
-      var month = now.getMonth() < 9 ? '0' + (now.getMonth() + 1) : now.getMonth() + 1;
-      var date = now.getFullYear() + '-' + month + '-' + now.getDate();
-      return date
-    },
-    getFinishDate() {
-      return this.$store.state.transportForm['start'];
-    },
+
   }
 }
 </script>
@@ -85,11 +82,11 @@ export default {
   float: right;
 }
 
-.footer {
+.my-footer {
   width: 100%;
 }
 .my-input {
-  margin: 250px auto 318px auto;
+  margin: 150px auto 113px auto;
   width: 70%;
 
 }

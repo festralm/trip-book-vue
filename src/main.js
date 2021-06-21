@@ -6,13 +6,19 @@ import PortalVue from "portal-vue";
 import {BootstrapVue, IconsPlugin} from "bootstrap-vue";
 import VueRouter from "vue-router";
 import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css';
+import VCalendar from 'v-calendar';
+import vuetify from 'vuetify' // path to vuetify export
+import Calendar from 'v-calendar/lib/components/calendar.umd'
+import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 
 Vue.use(VueRouter)
 Vue.use(PortalVue)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(Vuex)
+Vue.use(VCalendar);
+Vue.component('calendar', Calendar)
+Vue.component('date-picker', DatePicker)
 
 const store = new Vuex.Store({
   state: {
@@ -36,15 +42,16 @@ const store = new Vuex.Store({
       'start': null,
       'finish': null,
       'carPhotoUrls': [],
+      'range': null,
     },
     cars: [],
     addresses: [],
-    car: []
   }
 })
 
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')

@@ -2,6 +2,7 @@
   <div class="default">
     <my-menu></my-menu>
     <router-view @updateMenu="updateMenu()"/>
+    <MyFooter></MyFooter>
   </div>
 </template>
 
@@ -9,9 +10,10 @@
 
 import MyMenu from "@/layouts/MyMenu";
 import router from "@/router";
+import MyFooter from "./MyFooter";
 export default {
   name: "DefaultLayout",
-  components: {MyMenu},
+  components: {MyFooter, MyMenu},
   data() {
     return {
     }

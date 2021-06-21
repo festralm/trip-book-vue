@@ -12,7 +12,7 @@
                     v-model="$store.state.transportForm['brand']"
                     :options="options"></b-select>
       </div>
-      <div class="footer">
+      <div class="my-footer">
         <div class="footer-content m-4">
           <b-button class="back" @click="$emit('back')" variant="outline-secondary">Назад</b-button>
           <b-button class="next" @click="$emit('next') " v-bind:disabled="$store.state.transportForm['brand'] === 0"
@@ -97,7 +97,7 @@ export default {
   float: right;
 }
 
-.footer {
+.my-footer {
   width: 100%;
 }
 

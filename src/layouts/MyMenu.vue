@@ -99,6 +99,7 @@ export default {
 }
 
 .menu-container {
+  font-family: 'Roboto Mono', monospace;
   display: flex;
   justify-content: space-around;
   align-items: center;

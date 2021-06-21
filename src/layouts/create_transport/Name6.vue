@@ -10,7 +10,7 @@
         <b-input class="address-input my-4 py-2" v-model="$store.state.transportForm['name']"
                  placeholder="Введите название" v-bind:value="$store.state.transportForm['name']"></b-input>
       </div>
-      <div class="footer">
+      <div class="my-footer">
         <div class="footer-content m-4">
           <b-button class="back" @click="$emit('back')" variant="outline-secondary">Назад</b-button>
           <b-button class="next" @click="$emit('next')" variant="secondary"
@@ -62,7 +62,7 @@ export default {
   float: right;
 }
 
-.footer {
+.my-footer {
   width: 100%;
 }
 .my-input {

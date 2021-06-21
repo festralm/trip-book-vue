@@ -39,6 +39,8 @@ export default {
           this.user.id = data['id'];
           this.user.phoneNumber = data['phoneNumber]'];
         })
+      } else {
+        router.push("/error/default")
       }
       this.$forceUpdate()
     },

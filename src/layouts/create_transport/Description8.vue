@@ -7,13 +7,15 @@
     </div>
     <div class="right">
       <div class="my-input ">
-        <b-form-textarea class="description-input my-4 py-2" v-model="$store.state.transportForm['description']"
+        <b-form-textarea  class="description-input my-4 py-2" v-model="$store.state.transportForm['description']"
                      placeholder="Введите текст" v-bind:value="$store.state.transportForm['description']"></b-form-textarea>
       </div>
-      <div class="footer">
+<!--      todo length error-->
+      <div class="my-footer">
         <div class="footer-content m-4">
           <b-button class="back" @click="$emit('back')" variant="outline-secondary">Назад</b-button>
-          <b-button class="next" @click="$emit('next')" variant="secondary">Продолжить</b-button>
+          <b-button class="next" @click="$emit('next')" variant="secondary"
+          v-bind:disabled="$store.state.transportForm.description.length > 1000">Продолжить</b-button>
         </div>
       </div>
     </div>
@@ -61,7 +63,7 @@ export default {
   float: right;
 }
 
-.footer {
+.my-footer {
   width: 100%;
 }
 .my-input {

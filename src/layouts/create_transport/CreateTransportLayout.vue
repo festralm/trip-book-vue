@@ -79,6 +79,8 @@ export default {
       this.step--;
     },
     async createTransport() {
+      this.$store.state.transportForm.start = this.$store.state.transportForm.range.start;
+      this.$store.state.transportForm.finish = this.$store.state.transportForm.range.end;
       const request = new Request(
           "http://localhost/car/create",
           {

@@ -26,7 +26,7 @@
     </div>
     <div class="ads">
       <p class="p-0 m-0">Поиск по объявлениям</p>
-      <b-button variant="light">Искать</b-button>
+      <a href=""><b-button variant="light">Искать</b-button></a>
       <!--          todo transports search-->
     </div>
   </div>
@@ -84,8 +84,9 @@ export default {
         response.text().then(data => {
           this.$store.state.users = JSON.parse(data);
         })
+      } else {
+        router.push("/error/default")
       }
-      //todo errors
     }
   }
 

@@ -8,7 +8,7 @@
     <hr>
     <a href="/rent-transport#rent">Сдать транспорт в аренду</a>
     <a href="/profile">Мой профиль</a>
-    <a v-if="$store.state.isAdmin === 'true'" @click="getAdminPage()">Страница администратора</a>
+    <a href="/admin" v-if="$store.state.isAdmin === 'true'" @click="getAdminPage()">Страница администратора</a>
     <hr>
     <a href="/help">Помощь</a>
     <a @click="logout()" href="#">Выйти</a>
@@ -45,9 +45,6 @@ export default {
       } else {
         router.push("/error/default")
       }
-    },
-    async getAdminPage() {
-      await router.push("/admin");
     },
   },
 }

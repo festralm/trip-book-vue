@@ -1,23 +1,31 @@
 <template>
-  <div class="transport-list-wrapper">
+  <div class="transport-list-wrapper mb-3">
     <div class="cars list">
-      <p class="type p-0 m-0">Легковые автомобили</p>
-      <b-row class=" pt-4 ps-4 ">
-      <car-for-search v-for="(car, key) in $store.state.cars" v-bind:car="car" v-bind:key="key"></car-for-search>
-      </b-row>
+      <a href="/" class="type p-0 m-0">Легковые автомобили ></a>
+<!--      todo search-->
+      <div class="list-wrapper mt-4">
+        <div class="car" v-for="(car, key) in $store.state.cars" v-bind:car="car" :key="key">
+          <a v-bind:href="`/transports/cars/${car.id}`">
+            <img class="image pb-2" :src="require(`../assets/${car.carPhotoUrls[0]}`)"/>
+          </a>
+          <div  class="text-container text-center">
+            <a v-bind:href="`/transports/cars/${car.id}`" class="px-1">{{car.name}}</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <!--  TODO empty transports-->
 </template>
 
 <script>
-import CarForSearch from "@/layouts/CarForSearch";
+import router from "../router";
 export default {
   name: "Transports",
-  components: {CarForSearch},
+  methods: {
+  },
   async beforeMount() {
     const request = new Request(
-        "http://localhost/transports",
+        "http://localhost/car/best/4",
         {
           method: "GET",
         }
@@ -27,19 +35,22 @@ export default {
     }
     var response = await fetch(request);
 
-    response.text().then(data =>{
-      this.$store.state.cars = JSON.parse(data)['cars'];
-    })
-  }
+    if (response.status === 200) {
+      response.text().then(data => {
+        this.$store.state.cars = JSON.parse(data);
+      })
+    } else {
+      await router.push("/error/default")
+    }
+  },
 }
 </script>
 
 <style scoped>
 
 .transport-list-wrapper {
-  margin-left: 150px;
-  margin-right: 210px;
-  margin-top: 50px;
+  margin: 50px auto auto auto;
+  width: 1200px;
 }
 
 .type {
@@ -48,5 +59,45 @@ export default {
   font-size: 30px;
   font-weight: 600;
   cursor: pointer;
+  color: black;
+  text-decoration: none;
+}
+
+.list-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: auto;
+}
+
+
+.car {
+  margin: 10px 20px 10px 20px;
+}
+
+.image {
+  cursor: pointer;
+  width: 260px;
+  height: 260px;
+  object-fit: cover;
+}
+
+.text-container {
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: bold;
+  width: 260px;
+}
+.text-container a {
+  display: block;
+  font-family: 'Roboto Mono', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+  color: black;
+}
+.text-container a:hover {
+  color: #b8a7a7;
 }
 </style>
