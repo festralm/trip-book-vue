@@ -89,16 +89,7 @@
                 :value="null"
                 color="red"
                 v-bind:mode="car.forHour === true ? 'dateTime' : 'date'"
-                :disabled-dates="[
-                    {
-                  start: null ,
-                  end: car['start']
-                },
-                    {
-                  start: car['finish'] ,
-                  end: null
-                },
-                ]"
+                v-bind:disabled-dates="car.books"
                 is-range
                 v-model="range"
             />
@@ -114,7 +105,9 @@
           </div>
         </div>
         <div class="rent-button ">
-          <b-button v-bind:disabled="this.range.start === null || this.range.end === null" variant="outline-danger" class="rent-button">Забронировать</b-button>
+          <b-button v-bind:disabled="this.range.start === null || this.range.end === null ||
+this.car.forHour && getTimeAmount() === 0"
+                    variant="outline-danger" class="rent-button" @click="book()">Забронировать</b-button>
         </div>
       </div>
     </div>
@@ -122,10 +115,10 @@
       <div class="rating-top-container">
         <div class="image">
           <!--        todo rate-->
-          <a href=""><img src="../assets/rating.png"></a>
+          <img src="../assets/rating.png">
         </div>
-        <div class="top ">
-          <a href="" class="ps-3 fw-bold button">{{car['rating']}} (Количество)</a>
+        <div class="top">
+          <p href="" class="ps-3 fw-bold">{{car['rating']}} (Количество)</p>
         </div>
       </div>
     </div>
@@ -156,6 +149,7 @@ export default {
         rating: 0,
         user: {},
         withDriver: null,
+        books: []
       },
       range: {
         start: null,
@@ -182,12 +176,60 @@ export default {
         if (response.status === 200) {
           response.text().then(data => {
             this.user = JSON.parse(data);
-            this.updateFavorite()
+            this.updateFavorite();
           })
         } else {
           await router.push("/error/default")
         }
       }
+    },
+    async book() {
+      const request = new Request(
+          "http://localhost/car/book/" + this.car.id,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(this.range),
+          }
+      );
+      if (this.$store.state.token !== null) {
+        request.headers.append("Authorization", this.$store.state.token);
+      }
+      var response = await fetch(request);
+
+      if (response.status === 200) {
+        response.text().then(data => {
+          this.car = JSON.parse(data);
+          console.log(this.car)
+        })
+        await this.editBooks()
+        console.log(this.car.books)
+      } else {
+        await router.push("/error/default")
+      }
+    },
+    editBooks() {
+      this.car['start'] = (new Date() > new Date(this.car['start']) ? new Date() :  new Date(this.car['start'])) - 1000 * 60 * 60 * 24
+      this.car['finish'] = new Date(this.car['finish']).getTime() + 1000 * 60 * 60 * 24
+      this.car.books = this.car.books.map((x) => {
+            return {
+              start: new Date(x.start).getTime(),
+              end: new Date(x.end).getTime()
+            }
+          }
+      );
+      this.car.books.push(
+          {
+            start: null,
+            end: this.car['start']
+          },
+          {
+            start: this.car['finish'] ,
+            end: null
+          },
+      )
     },
     async deleteWishlist(id) {
       if (this.$store.state.authorised === null) {
@@ -217,9 +259,6 @@ export default {
     updateFavorite() {
       for (var i = 0; i < this.user.wishlist.length; i++) {
         if (this.user.wishlist[i].id === this.car.id) {
-          console.log(this.user.cars[i].id);
-          console.log(this.car.id)
-          console.log(this.user)
           this.favorite = true;
           return;
         }
@@ -280,8 +319,6 @@ export default {
           router.push("/error/default")
         }
         this.car = JSON.parse(data);
-        this.car['start'] = (new Date() > new Date(this.car['start']) ? new Date() :  new Date(this.car['start'])) - 1000 * 60 * 60 * 24
-        this.car['finish'] = new Date(this.car['finish']).getTime() + 1000 * 60 * 60 * 24
       })
     } else {
       await router.push("/error/default")
@@ -306,6 +343,7 @@ export default {
         response.text().then(data => {
           this.user = JSON.parse(data);
           this.updateFavorite();
+          this.editBooks();
         })
       } else {
         await router.push("/error/default")
@@ -506,5 +544,6 @@ export default {
 }
 .with-driver {
   font-size: 15px;
+  color: #b8a7a7;
 }
 </style>

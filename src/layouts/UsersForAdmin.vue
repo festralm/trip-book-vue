@@ -16,7 +16,6 @@
       </div>
     </div>
   </div>
-  <!--  todo empty users list-->
 </template>
 
 <script>
@@ -130,6 +129,7 @@ export default {
 
 .image {
   cursor: pointer;
+  border-radius: 20px;
 }
 
 .text-container {

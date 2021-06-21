@@ -20,6 +20,11 @@ import Error from "../views/Error";
 import Banned from "../layouts/errors/Banned";
 import Deleted from "../layouts/errors/Deleted";
 import Default from "../layouts/errors/Default";
+import Wishlist from "../layouts/Wishlist";
+import MyTransport from "../layouts/MyTransport";
+import Trips from "../layouts/Trips";
+import MyProfile from "../layouts/MyProfile";
+import UsersProfile from "../layouts/UsersProfile";
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -137,6 +142,31 @@ const routes = [
             component: Default,
           },
         ]
+      },
+      {
+        path: '/wishlist',
+        name: 'Wishlist',
+        component: Wishlist,
+      },
+      {
+        path: '/trips',
+        name: 'Trips',
+        component: Trips,
+      },
+      {
+        path: '/my-transport',
+        name: 'MyTransport',
+        component: MyTransport,
+      },
+      {
+        path: '/profile',
+        name: 'MyProfile',
+        component: MyProfile,
+      },
+      {
+        path: '/users/:id',
+        name: 'UsersProfile',
+        component: UsersProfile,
       },
     ]
   },

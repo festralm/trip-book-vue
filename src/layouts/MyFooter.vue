@@ -18,5 +18,6 @@ export default {
   z-index: 100;
   bottom: 0;
   border-top: 1px solid #dbcaca;
+  background-color: #f8f6f6;
 }
 </style>

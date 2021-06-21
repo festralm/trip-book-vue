@@ -80,6 +80,7 @@ export default {
   width: 260px;
   height: 260px;
   object-fit: cover;
+  border-radius: 20px;
 }
 
 .text-container {
