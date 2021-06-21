@@ -4,10 +4,10 @@
     <div class="top-container">
       <div class="image">
         <!--        todo rate-->
-        <a href=""><img src="../assets/rating.png"></a>
+        <a href="#rating"><img src="../assets/rating.png"></a>
       </div>
       <div class="top ">
-        <a href="" class="ps-3 fw-bold button">{{car['rating']}} (Количество)</a>
+        <a href="#rating" class="ps-3 fw-bold button">{{car['rating']}} (Количество)</a>
       </div>
       <div class="top">
         <p class="px-3">·</p>
@@ -16,15 +16,21 @@
         <p>Адрес</p>
       </div>
       <div class="right"></div>
-      <div class="image button">
+      <div v-if="favorite" class="image button">
+        <img src="../assets/heart.png">
+      </div>
+      <div v-else class="image button">
         <img src="../assets/heart-empty.png">
       </div>
       <!--      todo wishlist-->
-      <div  class="top px-3">
-        <p class="button">Сохранить</p>
+      <div v-if="favorite" class="top px-3">
+        <p class="button" @click="deleteWishlist(car.id)">Сохранено</p>
+      </div>
+      <div v-else class="top px-3">
+        <p class="button" @click="saveWishlist(car.id)">Сохранить</p>
       </div>
     </div>
-    <div class="photo-container">
+    <div class="photo-container ">
       <div v-if="car['carPhotoUrls'].length === 1">
         <img class="one-image" :src="require(`../assets/${car['carPhotoUrls'][0]}`)"/>
       </div>
@@ -61,11 +67,19 @@
         </div>
       </div>
     </div>
-    <div class="flex-container mt-5">
-      <div class="description">
+    <div class="flex-container mt-5 mb-5">
+      <div class="description ms-3">
+        <p class="brand">{{ car['brand'] }} {{car['model']}}</p>
+        <p class="with-driver">·
+          <span v-if="car['withDriver'] === true">Автомобиль с водителем</span>
+          <span v-else>Автомобиль без водителя</span>
+          ·
+        </p>
+        <hr class="my-4 hr">
         <p>{{car['description']}}</p>
+        <hr class="my-4 hr">
       </div>
-      <div class="rent">
+      <div class="rent ">
         <p ><span class="price" >{{getPrice(car['price'])}}₽</span> / <span v-if="car['forHour']">в час</span><span v-else>в сутки</span> </p>
 
         <div class="calendar-container">
@@ -74,10 +88,15 @@
             <v-date-picker
                 :value="null"
                 color="red"
-                mode="dateTime"
-                :available-dates="[{
-                  start: (new Date() > new Date(car['start']) ? new Date() :  new Date(car['start'])) ,
-                  end: new Date(car['finish'])
+                v-bind:mode="car.forHour === true ? 'dateTime' : 'date'"
+                :disabled-dates="[
+                    {
+                  start: null ,
+                  end: car['start']
+                },
+                    {
+                  start: car['finish'] ,
+                  end: null
                 },
                 ]"
                 is-range
@@ -85,8 +104,28 @@
             />
           </div>
         </div>
-        <div class="rent-button">
-          <b-button>Написать продавцу</b-button>
+        <div class="total-price mt-2 ">
+          <div v-if="range.start !== null && range.end !== null">
+            <div class="total-price-container">
+              <p class="text-decoration-underline">{{car.price}} x {{getTimeAmount()}} <span v-if="car.forHour">часа</span><span v-else>сутки</span></p>
+              <div class="empty"></div>
+              <p class="fw-bold">{{ getTotalPrice() }}₽</p>
+            </div>
+          </div>
+        </div>
+        <div class="rent-button ">
+          <b-button v-bind:disabled="this.range.start === null || this.range.end === null" variant="outline-danger" class="rent-button">Забронировать</b-button>
+        </div>
+      </div>
+    </div>
+    <div class="rating" id="rating">
+      <div class="rating-top-container">
+        <div class="image">
+          <!--        todo rate-->
+          <a href=""><img src="../assets/rating.png"></a>
+        </div>
+        <div class="top ">
+          <a href="" class="ps-3 fw-bold button">{{car['rating']}} (Количество)</a>
         </div>
       </div>
     </div>
@@ -101,6 +140,8 @@ export default {
   name: "Car",
   data() {
     return {
+      favorite: false,
+      user: {},
       car: {
         id: 0,
         finish: null,
@@ -117,33 +158,74 @@ export default {
         withDriver: null,
       },
       range: {
-        start: new Date(),
-        end: new Date()
+        start: null,
+        end: null
       }
     }
   },
   methods: {
     async saveWishlist(id) {
-      const request = new Request(
-          "http://localhost/transports/cars/wishlist/" + id,
-          {
-            method: "POST",
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
-
-      if (response.status === 200) {
-        response.text().then(data => {
-          this.$store.state.car = JSON.parse(data);
-        })
+      if (this.$store.state.authorised === null) {
+        router.push("/sign-in")
       } else {
-        await router.push("/error/default")
+        const request = new Request(
+            "http://localhost/car/wishlist/" + id,
+            {
+              method: "POST",
+            }
+        );
+        if (this.$store.state.token !== null) {
+          request.headers.append("Authorization", this.$store.state.token);
+        }
+        var response = await fetch(request);
+
+        if (response.status === 200) {
+          response.text().then(data => {
+            this.user = JSON.parse(data);
+            this.updateFavorite()
+          })
+        } else {
+          await router.push("/error/default")
+        }
       }
     },
+    async deleteWishlist(id) {
+      if (this.$store.state.authorised === null) {
+        router.push("/sign-in")
+      } else {
+        const request = new Request(
+            "http://localhost/car/delete-wishlist/" + id,
+            {
+              method: "POST",
+            }
+        );
+        if (this.$store.state.token !== null) {
+          request.headers.append("Authorization", this.$store.state.token);
+        }
+        var response = await fetch(request);
 
+        if (response.status === 200) {
+          response.text().then(data => {
+            this.user = JSON.parse(data);
+            this.updateFavorite();
+          })
+        } else {
+          await router.push("/error/default")
+        }
+      }
+    },
+    updateFavorite() {
+      for (var i = 0; i < this.user.wishlist.length; i++) {
+        if (this.user.wishlist[i].id === this.car.id) {
+          console.log(this.user.cars[i].id);
+          console.log(this.car.id)
+          console.log(this.user)
+          this.favorite = true;
+          return;
+        }
+      }
+      this.favorite = false;
+    },
     getPrice(oldPrice) {
       var price = oldPrice.toString();
       for (var i = price.length - 3; i > 0; i -= 3) {
@@ -151,6 +233,31 @@ export default {
       }
       return  price;
     },
+    getTotalPrice() {
+      return this.getTimeAmount() * this.car.price
+    },
+    getTimeAmount() {
+      if (this.range.start === null || this.range.end === null) {
+        return 0;
+      }
+      if (this.car['forHour'] === true) {
+        var range = new Date(this.range.end - this.range.start)
+        var hours = range.getHours()
+        if (range.getDate() > 1) {
+          hours += range.getDate() * 24;
+        }
+        if ( range.getMinutes() > 0) {
+          hours -= 2;
+        } else {
+          hours -= 3;
+        }
+        return hours;
+      } else {
+
+        return new Date(this.range.end - this.range.start).getDate()
+
+      }
+    }
   },
   async beforeMount() {
     this.$store.state.fixed = false;
@@ -173,9 +280,36 @@ export default {
           router.push("/error/default")
         }
         this.car = JSON.parse(data);
+        this.car['start'] = (new Date() > new Date(this.car['start']) ? new Date() :  new Date(this.car['start'])) - 1000 * 60 * 60 * 24
+        this.car['finish'] = new Date(this.car['finish']).getTime() + 1000 * 60 * 60 * 24
       })
     } else {
       await router.push("/error/default")
+    }
+
+    if (this.$store.state.authorised === null) {
+      this.favorite = false;
+    } else {
+      const request = new Request(
+          "http://localhost/profile",
+          {
+            method: "GET",
+          }
+      );
+      if (this.$store.state.token !== null) {
+        request.headers.append("Authorization", this.$store.state.token);
+      }
+      response = await fetch(request);
+
+      if (response.status === 200) {
+
+        response.text().then(data => {
+          this.user = JSON.parse(data);
+          this.updateFavorite();
+        })
+      } else {
+        await router.push("/error/default")
+      }
     }
   },
 }
@@ -192,7 +326,7 @@ export default {
   font-size: 25px;
 }
 
-.top-container {
+.top-container, .rating-top-container {
   display: flex;
 }
 .image img{
@@ -206,7 +340,7 @@ export default {
   flex-grow: 8;
 }
 
-.top-container img, .top-container p, .top-container a {
+.top-container img, .top-container p, .top-container a, .rating-top-container a {
   color: black;
   text-decoration: none;
 }
@@ -331,7 +465,8 @@ export default {
 }
 
 .description {
-  width: 70%;
+  width: 60%;
+  margin-right: 120px;
   font-size: 17px;
   line-height: 28px;
 }
@@ -339,7 +474,6 @@ export default {
 .rent {
   margin: 0 20px 0 20px;
   width: 320px;
-  height: 600px;
   border-radius: 20px;
   border: 1px solid #b8a7a7;
   box-shadow: 0 0px 20px 1px #dedede;
@@ -350,6 +484,27 @@ export default {
   font-size: 20px;
   font-weight: bold;
 }
+.total-price-container {
+  display: flex;
+  font-size: 18px;
+}
+.empty {
+  flex-grow: 8;
+}
 
+.rent-button {
+  width: 100%;
+}
 
+.brand {
+  font-size: 25px;
+}
+
+.hr {
+  height: 1px;
+  color: #b8a7a7;
+}
+.with-driver {
+  font-size: 15px;
+}
 </style>
