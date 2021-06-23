@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import TransportsList from "./TransportsList";
+import TransportsList from "../components/TransportsList";
 import router from "../router";
 
 export default {
@@ -42,7 +42,6 @@ export default {
     var response = await fetch(request);
     if (response.status === 200) {
       response.json().then(data => {
-        console.log(data)
         this.user = data;
         this.$forceUpdate();
       })

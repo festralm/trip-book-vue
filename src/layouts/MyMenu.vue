@@ -1,4 +1,4 @@
-<template>
+<template >
   <div class="menu-container" v-bind:class="{fixed: $store.state.fixed}">
     <div>
       <a href="/">

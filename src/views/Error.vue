@@ -1,7 +1,7 @@
 <template>
   <div class="text-wrapper text-center">
     <div class="text">
-      <router-view></router-view>
+      <p>Что-то пошло не так...</p>
     </div>
   </div>
 </template>
@@ -27,12 +27,7 @@ export default {
   padding-top: 150px;
 }
 
-.main {
-  font-size: 60px;
-
-}
-.small {
-  font-weight: normal;
-  font-size: 30px;
+p {
+  margin-top: 130px;
 }
 </style>

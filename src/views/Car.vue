@@ -3,7 +3,6 @@
     <p class="name pt-4">{{car['name']}}</p>
     <div class="top-container">
       <div class="image">
-        <!--        todo rate-->
         <a href="#rating"><img src="../assets/rating.png"></a>
       </div>
       <div class="top ">
@@ -22,7 +21,6 @@
       <div v-else class="image button">
         <img src="../assets/heart-empty.png">
       </div>
-      <!--      todo wishlist-->
       <div v-if="favorite" class="top px-3">
         <p class="button" @click="deleteWishlist(car.id)">Сохранено</p>
       </div>
@@ -96,7 +94,7 @@
           </div>
         </div>
         <div class="total-price mt-2 ">
-          <div v-if="range.start !== null && range.end !== null">
+          <div v-if="range.start !== null && range.end !== null && this.car.forHour && getTimeAmount() !== 0">
             <div class="total-price-container">
               <p class="text-decoration-underline">{{car.price}} x {{getTimeAmount()}} <span v-if="car.forHour">часа</span><span v-else>сутки</span></p>
               <div class="empty"></div>
@@ -114,11 +112,10 @@ this.car.forHour && getTimeAmount() === 0"
     <div class="rating" id="rating">
       <div class="rating-top-container">
         <div class="image">
-          <!--        todo rate-->
           <img src="../assets/rating.png">
         </div>
         <div class="top">
-          <p href="" class="ps-3 fw-bold">{{car['rating']}} (Количество)</p>
+          <p href="" class="ps-3 fw-bold">{{car['rating']}} · Количество</p>
         </div>
       </div>
     </div>
@@ -202,10 +199,8 @@ export default {
       if (response.status === 200) {
         response.text().then(data => {
           this.car = JSON.parse(data);
-          console.log(this.car)
         })
         await this.editBooks()
-        console.log(this.car.books)
       } else {
         await router.push("/error/default")
       }
@@ -312,12 +307,7 @@ export default {
     var response = await fetch(request);
 
     if (response.status === 200) {
-
       response.text().then(data => {
-        const statusNumber = data['statusNumber'];
-        if (statusNumber === 10 || statusNumber === 11 || statusNumber === 12) {
-          router.push("/error/default")
-        }
         this.car = JSON.parse(data);
       })
     } else {
@@ -339,9 +329,8 @@ export default {
       response = await fetch(request);
 
       if (response.status === 200) {
-
         response.text().then(data => {
-          this.user = JSON.parse(data);
+          this.user = data;
           this.updateFavorite();
           this.editBooks();
         })
@@ -545,5 +534,14 @@ export default {
 .with-driver {
   font-size: 15px;
   color: #b8a7a7;
+}
+
+.rating-top-container .top {
+  font-size: 19px;
+  padding-top: 0px;
+}
+
+.rating-top-container .image img{
+  width: 19px;
 }
 </style>

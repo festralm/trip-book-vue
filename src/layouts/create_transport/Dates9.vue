@@ -11,7 +11,7 @@
         <v-date-picker
           :value="null"
           color="red"
-          mode="dateTime"
+          v-bind:mode="$store.state.transportForm.forHour === true ? 'dateTime' : 'date'"
           :available-dates="[{
                   start: new Date() ,
                   end: null
@@ -19,7 +19,6 @@
                 ]"
           is-range
           v-model="$store.state.transportForm.range"
-          @change="setForm()"
       />
       </div>
       <div class="my-footer">

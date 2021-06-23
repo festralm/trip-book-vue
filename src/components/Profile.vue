@@ -8,7 +8,6 @@
         <div class="info mx-4 text-left">
           <div class="rating-container">
             <div class="image">
-              <!--        todo rate-->
               <a href="#reviews"><img src="../assets/rating.png"></a>
             </div>
             <div class="top ">
@@ -46,25 +45,26 @@
         <p class="info-name">Объявления</p>
         <div class="car-container">
           <div class="car" v-for="(car, key) in user.cars" v-bind:car="car" :key="key">
-            <img class="car-photo" :src="require(`../assets/${car.carPhotoUrls[0]}`)"/>
+            <a v-bind:href="`/transports/cars/${car.id}`">
+              <img class="car-photo" :src="require(`../assets/${car.carPhotoUrls[0]}`)"/>
+            </a>
             <div class="rating-container">
               <div class="car-image">
-                <!--        todo rate-->
-                <a href=""><img src="../assets/rating.png"></a>
+                <a v-bind:href="`/transports/cars/${car.id}`"><img src="../assets/rating.png"></a>
               </div>
               <div class="top ">
-                <a href="" class="ps-2  button">{{car.rating}} (Количество отзывов)</a>
+                <a v-bind:href="`/transports/cars/${car.id}`" class="ps-2  button">{{car.rating}} (Количество отзывов)</a>
               </div>
             </div>
-            <a href="">{{car.name}}</a>
+            <a v-bind:href="`/transports/cars/${car.id}`">{{car.name}}</a>
             <br>
-            <a href="">{{car.brand}} {{car.model}}</a>
+            <a v-bind:href="`/transports/cars/${car.id}`">{{car.brand}} {{car.model}}</a>
           </div>
         </div>
       </div>
-      <div class="rating-container mt-5">
+      <div id="reviews" class="rating-container mt-5">
         <div class="image">
-          <!--        todo rate-->
+          <!--        todo rating-->
           <p><img src="../assets/rating.png"></p>
         </div>
         <div class="top ">

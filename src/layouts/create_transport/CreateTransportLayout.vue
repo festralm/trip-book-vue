@@ -35,7 +35,7 @@
   <div  v-else-if="step === 11">
     <final ></final>
   </div>
-  <!--  todo images, location-->
+  <!--  todo location-->
 </template>
 
 <script>

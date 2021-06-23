@@ -33,8 +33,9 @@
               ></g>
           </svg>
         </div>
-<!--        todo confirmation!-->
-<!--        todo google auth-->
+        <!--        todo confirmation!-->
+        <!--        todo google auth-->
+        <!--        todo password regex-->
         <a>Продолжить с Google</a>
       </b-button>
     </b-form>
@@ -71,20 +72,23 @@ export default {
       );
       var response = await fetch(request);
 
-      response.json().then(data => {
-        if (response.status === 200) {
+      if (response.status === 200) {
+        response.json().then(data => {
           if (data['statusNumber'] === 6) {
-            this.errors.add(data['message']);
-            this.$forceUpdate()
-          } else {
             localStorage.setItem('token', response.headers.get("Authorization"));
             localStorage.setItem('authorised', 'true');
             this.$emit("updateMenu()");
             router.push("/")
           }
-        }
 
-      })
+        })
+      } else if (response.status === 403) {
+        console.log(response)
+        this.errors.add('Этот email уже занят');
+        this.$forceUpdate()
+      } else {
+        router.push("error/default");
+      }
 
     },
     checkPasswords() {
