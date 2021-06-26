@@ -68,19 +68,18 @@ export default {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(this.form),
-          }
+          },
       );
-      var response = await fetch(request);
-
+      if (this.$store.state.token !== '') {
+        request.headers.append("Authorization", this.$store.state.token);
+      }
+      const response = await fetch(request);
       if (response.status === 200) {
         response.json().then(data => {
-          if (data['statusNumber'] === 6) {
             localStorage.setItem('token', response.headers.get("Authorization"));
             localStorage.setItem('authorised', 'true');
             this.$emit("updateMenu()");
             router.push("/")
-          }
-
         })
       } else if (response.status === 403) {
         console.log(response)

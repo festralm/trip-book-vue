@@ -1,6 +1,5 @@
 <template>
-
-  <profile v-bind:is-admin="false" v-bind:id="null"></profile>
+  <profile v-bind:id="null"></profile>
 </template>
 
 <script>

@@ -42,7 +42,9 @@ export default {
       response.json().then(data => {
           localStorage.setItem('token', this.$store.state.token);
           localStorage.setItem('authorised', 'true');
-          localStorage.setItem('isAdmin', String(data['body']['role'] === 'ADMIN'));
+          console.log(data)
+          localStorage.setItem('isAdmin', String(data['role'] === 'ADMIN'));
+        console.log(this.$store.state.isAdmin)
       })
     } else {
       localStorage.removeItem('token');

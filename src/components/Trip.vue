@@ -40,12 +40,13 @@ export default {
   },
   methods: {
     getDate(car, start) {
+      let date;
       if (start) {
-        var date = new Date(car.start);
+        date = new Date(car.start);
       } else {
         date = new Date(car.finish);
       }
-      var res = date.getDate() + " " + this.months[date.getMonth()];
+      let res = date.getDate() + " " + this.months[date.getMonth()];
       if (new Date().getFullYear() !== date.getFullYear()) {
         res += date.getFullYear();
       }

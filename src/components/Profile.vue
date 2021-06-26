@@ -15,22 +15,7 @@
             </div>
           </div>
           <p class="fw-bold mt-3 ">Email: {{user.email}}</p>
-          <div v-if="isAdmin">
-            <b-button class="my-button" @click="undoAdmin(user.id)" v-if="user.role === 'ADMIN'"
-                      variant="outline-danger" >Сделать пользователем</b-button>
-            <b-button class="my-button" @click="makeAdmin(user.id)" v-else
-                      variant="outline-success" >Сделать администратором</b-button>
-            <br>
-            <b-button class="my-button" @click="blockUser(user.id)" v-if="user.isBlocked === false"
-                      variant="outline-danger" >Заблокировать</b-button>
-            <b-button class="my-button" @click="unblockUser(user.id)" v-else
-                      variant="outline-success" >Разблокировать</b-button>
-            <br>
-            <b-button class="my-button" @click="deleteUser(user.id)" v-if="user.isDeleted === false"
-                      variant="outline-danger" >Удалить</b-button>
-            <b-button class="my-button" @click="restoreUser(user.id)" v-else
-                      variant="outline-success" >Восстановить</b-button>
-          </div></div>
+        </div>
       </div>
     </div>
     <div class="more-info">
@@ -40,7 +25,7 @@
         <p class="info-name mpt-5">Информация</p>
         <p class="description">{{ user.description }}</p>
       </div>
-      <div class="mb-5" v-if="user.cars !== null && user.cars.length > 0">
+      <div class="mb-5" v-if="user.cars !== null && user.cars !== undefined && user.cars.length > 0">
         <hr class="hr my-4">
         <p class="info-name">Объявления</p>
         <div class="car-container">
@@ -81,7 +66,6 @@ import router from "@/router";
 export default {
   name: "Profile",
   props: {
-    isAdmin: null,
     id: null
   },
   data() {
@@ -91,181 +75,33 @@ export default {
   },
   methods: {
     async getUser() {
+      let url;
       if (this.id === null) {
-        var url = 'http://localhost/profile'
+        url = 'http://localhost/profile';
       } else {
         url = 'http://localhost/users/' + this.id
       }
       const request = new Request(
           url,
           {
-            method: "GET",
-          }
-      );
-      console.log(request)
-      if (this.$store.state.token !== '') {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      console.log(request)
-      var response = await fetch(request);
-      if (response.status === 200) {
-        response.json().then(data => {
-          this.user = data
-        })
-      } else {
-        router.push("/error/default")
-      }
-      this.$forceUpdate()
-
-    },
-    async getUserForAdmin() {
-      const request = new Request(
-          'http://localhost/admin/users/' + router.currentRoute.params['id'],
-          {
-            method: "GET",
+            method: "GET"
           }
       );
       if (this.$store.state.token !== '') {
         request.headers.append("Authorization", this.$store.state.token);
       }
-      var response = await fetch(request);
+      const response = await fetch(request);
       if (response.status === 200) {
-        response.json().then(data => {
-          this.user = data
-        })
+        this.user = await response.json()
       } else {
-        router.push("/error/default")
+        router.push("error/default")
       }
       this.$forceUpdate()
-    },
-    async blockUser(id) {
-      const request = new Request(
-          `http://localhost/admin/users/ban/${id}`,
-          {
-            method: "POST",
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
 
-      if (response.status === 200) {
-        response.json().then(data => {
-          this.user = data
-        })
-      } else {
-        router.push("/error/default")
-      }
-    },
-    async unblockUser(id) {
-      const request = new Request(
-          `http://localhost/admin/users/unban/${id}`,
-          {
-            method: "POST",
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
-
-      if (response.status === 200) {
-        response.json().then(data => {
-          this.user = data
-        })
-      } else {
-        router.push("/error/default")
-      }
-    },
-    async deleteUser(id) {
-      const request = new Request(
-          `http://localhost/admin/users/delete/${id}`,
-          {
-            method: "POST",
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
-
-      if (response.status === 200) {
-        response.json().then(data => {
-          this.user = data
-        })
-      } else {
-        router.push("/error/default")
-      }
-    },
-    async restoreUser(id) {
-      const request = new Request(
-          `http://localhost/admin/users/restore/${id}`,
-          {
-            method: "POST",
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
-
-      if (response.status === 200) {
-        response.json().then(data => {
-          this.user = data
-        })
-      } else {
-        router.push("/error/default")
-      }
-    },
-    async makeAdmin(id) {
-      const request = new Request(
-          `http://localhost/admin/make-admin/${id}`,
-          {
-            method: "POST",
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
-
-      if (response.status === 200) {
-        response.json().then(data => {
-          this.user = data
-        })
-      } else {
-        router.push("/error/default")
-      }
-    },
-    async undoAdmin(id) {
-      const request = new Request(
-          `http://localhost/admin/undo-admin/${id}`,
-          {
-            method: "POST",
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
-
-      if (response.status === 200) {
-        response.json().then(data => {
-          this.user = data
-        })
-      } else {
-        router.push("/error/default")
-      }
     },
   },
   async beforeMount() {
-    if (this.isAdmin) {
-      await this.getUserForAdmin();
-    } else {
-
-      await this.getUser();
-    }
+    await this.getUser();
   }
 }
 </script>
@@ -314,10 +150,6 @@ export default {
   display: flex;
 }
 
-.my-button {
-  width: 100%;
-  margin-bottom: 15px;
-}
 .more-info {
   margin: 0 0 0 100px;
 }
