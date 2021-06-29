@@ -102,6 +102,7 @@ export default {
   },
   async beforeMount() {
     await this.getUser();
+    this.user.cars.sort((x, y) => y.rating - x.rating)
   }
 }
 </script>

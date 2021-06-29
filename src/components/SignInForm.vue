@@ -67,7 +67,7 @@ export default {
             localStorage.setItem('token', response.headers.get("Authorization"));
             localStorage.setItem('authorised', 'true');
             router.push("/");
-            this.$emit('updateMenu', true);
+            this.$emit('updateMenu');
         })
       } else if (response.status === 403) {
         this.error = 'Неверный логин или пароль';
