@@ -1,5 +1,5 @@
 <template>
-<sign-up-form  @updateMenu="$emit('updateMenu')" />
+<sign-up-form  @updateMenu="$emit('updateMenu($event,userDefined)')" />
 </template>
 
 <script>

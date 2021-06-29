@@ -19,9 +19,14 @@ export default {
     }
   },
   methods: {
-    updateMenu() {
-      this.$store.state.authorised = 'true';
-      console.log('update')
+    updateMenu(event, authorized) {
+      console.log(authorized)
+      console.log(event)
+      if (authorized) {
+        this.$store.state.authorised = 'true';
+      } else {
+        this.$store.state.authorised = null;
+      }
       this.$store.state.menuShow = false;
       this.$forceUpdate()
     }
@@ -42,14 +47,13 @@ export default {
       response.json().then(data => {
           localStorage.setItem('token', this.$store.state.token);
           localStorage.setItem('authorised', 'true');
-          console.log(data)
           localStorage.setItem('isAdmin', String(data['role'] === 'ADMIN'));
-        console.log(this.$store.state.isAdmin)
       })
     } else {
       localStorage.removeItem('token');
       localStorage.removeItem('authorised');
       localStorage.removeItem('isAdmin');
+      this.updateMenu(false)
       if (response.status !== 203) {
         router.push("/error/default")
       }
