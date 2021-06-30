@@ -19,7 +19,7 @@
         <UserNavbar @updateMenu="updateMenu()"></UserNavbar>
       </div>
       <div v-show="$store.state.menuShow" v-else>
-        <AnonymousNavbar></AnonymousNavbar>
+        <AnonymousNavbar ></AnonymousNavbar>
       </div>
     </div>
   </div>

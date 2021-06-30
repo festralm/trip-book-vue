@@ -1,5 +1,5 @@
 <template>
-  <div class="list-wrapper mt-4 ">
+  <div v-if="list !== null && list.length > 0" class="list-wrapper mt-4 ">
     <div class="car" v-for="(car, key) in list" v-bind:car="car" :key="key">
       <a v-bind:href="`/transports/cars/${car.id}`">
         <img class="image pb-2" :src="require(`../assets/${car.carPhotoUrls[0]}`)"/>
@@ -14,13 +14,16 @@
         </div>
 <!--        todo onclick-->
         <b-button class="mt-3" v-if="review === true" variant="outline-warning"
-        @click="getReviewPage">Оставить отзыв</b-button>
+        @click="getReviewPage(car.id)">Оставить отзыв</b-button>
       </div>
     </div>
   </div>
+  <div class="no-trip text-center" v-else><p>Поездок пока нет</p></div>
 </template>
 
 <script>
+import router from "../router";
+
 export default {
   name: "Trip",
   props: {
@@ -46,8 +49,8 @@ export default {
     }
   },
   methods: {
-    getReviewPage() {
-
+    getReviewPage(id) {
+      router.push(`/transports/cars/${id}#rating`)
     },
     getDate(car, start) {
       let date;
@@ -124,5 +127,16 @@ export default {
 .model {
   font-size: 17px;
   font-weight: normal;
+}
+
+.no-trip {
+  margin: 20px;
+  width: 100%;
+  height: 150px;
+  background-color: #fff9f9;
+  border-radius: 20px;
+  font-size: 30px;
+  color: #b8a7a7;
+  padding: 50px 20px 20px;
 }
 </style>

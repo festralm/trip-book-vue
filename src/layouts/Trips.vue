@@ -80,7 +80,8 @@ export default {
       response.json().then(data => {
         this.user = data;
         this.user.books.sort((x, y) => new Date(x.finish).getTime() - new Date(y.finish).getTime())
-        this.oldBooks = this.user.books.filter(x => new Date(x.finish).getTime() < new Date());
+        this.oldBooks = this.user.books.filter(x => new Date(x.finish).getTime() < new Date())
+        .sort((x, y) => new Date(y.finish).getTime() - new Date(x.finish).getTime());
         this.currentBooks = this.user.books.filter(x =>
             new Date(x.start).getTime() <= new Date()
             && new Date(x.finish).getTime() >= new Date()
@@ -115,6 +116,5 @@ export default {
   color: black;
   text-decoration: none;
 }
-
 
 </style>
