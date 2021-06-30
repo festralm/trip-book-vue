@@ -78,7 +78,7 @@ export default {
       if (response.status === 200) {
         this.user = await response.json()
       } else {
-        router.push("error/default")
+        await router.push("error/default")
       }
       this.$forceUpdate()
 
@@ -87,6 +87,7 @@ export default {
   async beforeMount() {
     await this.getUser();
     this.user.cars.sort((x, y) => y.rating - x.rating)
+    console.log(this.user.cars)
   }
 }
 </script>

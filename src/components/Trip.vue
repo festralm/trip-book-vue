@@ -79,7 +79,7 @@ export default {
   margin: 10px 20px 10px 20px;
 }
 .car:hover {
-  background-color: #fff9f9;
+  box-shadow: 0 0px 10px 1px #dedede;
   border-radius: 30px;
 }
 .image {

@@ -432,14 +432,6 @@ export default {
           break;
       }
     },
-    outStar() {
-      console.log("out")
-      this.star1 = false;
-      this.star2 = false;
-      this.star3 = false;
-      this.star4 = false;
-      this.star5 = false;
-    },
     async saveWishlist(id) {
       if (this.$store.state.authorised === null) {
         router.push("/sign-in")
@@ -466,28 +458,32 @@ export default {
       }
     },
     async book() {
-      const request = new Request(
-          "http://localhost/car/book/" + this.car.id,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.range),
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
-
-      if (response.status === 200) {
-        await response.text().then(data => {
-          this.car = JSON.parse(data);
-          this.editBooks()
-        })
+      if (this.$store.state.authorised === null) {
+        router.push("/sign-in")
       } else {
-        await router.push("/error/default")
+        const request = new Request(
+            "http://localhost/car/book/" + this.car.id,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(this.range),
+            }
+        );
+        if (this.$store.state.token !== null) {
+          request.headers.append("Authorization", this.$store.state.token);
+        }
+        var response = await fetch(request);
+
+        if (response.status === 200) {
+          await response.text().then(data => {
+            this.car = JSON.parse(data);
+            this.editBooks()
+          })
+        } else {
+          await router.push("/error/default")
+        }
       }
     },
     async editBooks() {
@@ -590,7 +586,6 @@ export default {
         request.headers.append("Authorization", this.$store.state.token);
       }
       var response = await fetch(request);
-
       if (response.status === 200) {
         await response.text().then(data => {
           this.car = JSON.parse(data);
@@ -635,9 +630,9 @@ export default {
           .filter(x => new Date(x.start).getTime() <= new Date())
           .filter(x => x.id === this.car.id)
           .length !== 0;
-      this.$forceUpdate()
     }
-    console.log(this.car)
+    console.log(this.car.reviews)
+    this.$forceUpdate()
   },
 }
 </script>
