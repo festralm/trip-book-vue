@@ -3,17 +3,14 @@
     <div class="search-wrapper ">
       <b-form @submit.prevent="" class="search-container">
         <div>
-          <p class="p-0 m-0 ps-2">Местоположение</p>
-          <b-form-input v-model="form.address" autocomplete="off"
-                        class="p-2 my-input left" placeholder="Где будем искать?"></b-form-input>
-        </div>
-        <div>
           <p class="p-0 m-0 ps-2">Начало</p>
-          <b-form-input v-model="form.start" type="date" class="py-2 my-input date"></b-form-input>
+          <b-form-input v-model="$store.state.carSearch.start" type="date" :min="getDate()"
+                        :max="$store.state.carSearch.finish" class="py-2 my-input date"></b-form-input>
         </div>
         <div>
           <p class="p-0 m-0 ps-2">Конец</p>
-          <b-form-input v-model="form.end" type="date" class="p-2 my-input date"></b-form-input>
+          <b-form-input :min="$store.state.carSearch.start" v-model="$store.state.carSearch.finish"
+                        type="date" class="p-2 my-input date"></b-form-input>
         </div>
         <div>
           <div class="button-wrapper">
@@ -25,63 +22,38 @@
     <div class="advices">
       <p class="p-0 m-0">Читайте наши советы и советы наших пользователей</p>
       <a href="/"><b-button variant="light">Читать</b-button></a>
-<!--      todo advices-->
+      <!--      todo advices-->
     </div>
   </div>
 </template>
 
 <script>
+import router from "../router";
+
 export default {
   name: "TransportSearch",
   data() {
     return {
-      form: {
-        address: null,
-        start: null,
-        end: null
-      }
     }
   },
   methods: {
-    async search() {
-      //todo
-      const request = new Request(
-          "http://localhost/transports/search",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.form),
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
+    getDate() {
+      var now = new Date();
+      var month = now.getMonth() + 1;
+      if (month < 10) {
+        month = '0' + month;
       }
-      var response = await fetch(request);
-
-      response.text().then(data =>{
-        this.$store.state.transports = JSON.parse(data);
-      })
+      var date = now.getDate();
+      if (date < 10) {
+        date = '0' + date;
+      }
+      return now.getFullYear() + '-' + month + '-' + date
     },
-
-    // async showOptions() {
-    //   const request = new Request(
-    //       "http://localhost/transports/addresses",
-    //       {
-    //         method: "GET",
-    //       }
-    //   );
-    //   if (this.$store.state.token !== null) {
-    //     request.headers.append("Authorization", this.$store.state.token);
-    //   }
-    //   var response = await fetch(request);
-    //
-    //
-    //   response.text().then(data =>{
-    //     this.$store.state.addresses = JSON.parse(data);
-    //   })
-    // }
+    async search() {
+      if (this.$store.state.carSearch.start !== null && this.$store.state.carSearch.finish !== null) {
+        await router.push('/search');
+      }
+    },
   },
 }
 </script>
@@ -98,7 +70,7 @@ export default {
 .search-wrapper {
   font-family: 'Roboto Mono', monospace;
   margin: auto;
-  width: 50%;
+  width: 35%;
   background-color: white;
   height: 13%;
   border-radius: 50px;

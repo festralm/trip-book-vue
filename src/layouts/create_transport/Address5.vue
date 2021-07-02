@@ -6,18 +6,28 @@
       </div>
     </div>
     <div class="right">
-      <div class="address ">
-        <b-input class="address-input my-4 py-2" v-model="form.country" placeholder="Страна"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.region" placeholder="Регион"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.city" placeholder="Город"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.street" placeholder="Улица"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.building" placeholder="Дом"></b-input>
-        <b-input class="address-input my-4 py-2" v-model="form.literal" placeholder="Литреал"></b-input>
-      </div>
+      <GmapMap
+          class="map"
+          :center="myCoordinates"
+          :zoom="zoom"
+          ref="mapRef"
+          @dragend="handleDrag()"
+          @drag="handle"
+      >
+        <GmapMarker
+            :position="mapCoordinates"
+            :clickable="false"
+            :draggable="false"
+            :visible="5"
+        />
+
+      </GmapMap>
       <div class="my-footer">
         <div class="footer-content m-4">
           <b-button class="back" @click="$emit('back')" variant="outline-secondary">Назад</b-button>
-          <b-button class="next" @click="$emit('next')" variant="secondary">Продолжить</b-button>
+          <b-button class="next" @click="$emit('next')" variant="secondary"
+          :disabled="$store.state.transportForm.lat == null || $store.state.transportForm.lng == null"
+          >Продолжить</b-button>
         </div>
       </div>
     </div>
@@ -29,15 +39,71 @@ export default {
   name: "Address5",
   data() {
     return {
-      form: {
-        country: '',
-        region: '',
-        city: '',
-        street: '',
-        building: '',
-        literal: ''
-      }
+      map: null,
+      myCoordinates: {
+        lat: 0,
+        lng: 0,
+      },
+      zoom: 7,
     }
+  },
+  methods: {
+    handle() {
+      this.$store.state.transportForm.lat = this.map.getCenter().lat();
+      this.$store.state.transportForm.lng = this.map.getCenter().lng();
+    },
+    handleDrag() {
+      var center = {
+        lat: this.map.getCenter.lat(),
+        lng: this.map.getCenter.lng()
+      };
+      var zoom = this.map.getZoom();
+
+      localStorage.setItem('center', JSON.stringify(center));
+      localStorage.setItem('zoom', zoom);
+
+    },
+  },
+  created() {
+    if (localStorage.getItem('center')) {
+      this.myCoordinates = JSON.parse(localStorage.getItem('center'))
+    } else {
+      this.$getLocation({})
+          .then(coordinates => {
+            this.myCoordinates = coordinates;
+          })
+          .catch(error => {
+            this.myCoordinates = {
+              lat: 55.7879,
+              lng: 49.1233,
+            }
+          });
+
+    }
+    if (localStorage.getItem('zoom')) {
+      this.zoom = parseInt(localStorage.getItem('zoom'))
+    }
+
+  },
+  mounted() {
+    this.$refs.mapRef.$mapPromise.then(map => {
+      this.map = map
+    })
+  },
+  computed: {
+    mapCoordinates() {
+      if (!this.map) {
+        return {
+          lat: 55.7879,
+          lng: 49.1233,
+        }
+      }
+      return {
+        lat: this.map.getCenter().lat(),
+        lng: this.map.getCenter().lng(),
+      }
+    },
+
   }
 }
 </script>
@@ -81,9 +147,9 @@ export default {
 .my-footer {
   width: 100%;
 }
-.address {
-  margin: 150px auto 144px auto;
-  width: 70%;
+.map {
+  width: 100%;
+  height: 641px;
 
 }
 </style>
