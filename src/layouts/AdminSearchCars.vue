@@ -6,10 +6,17 @@
           <b-form-input v-model="form.id" class="my-input left id" placeholder="ID"></b-form-input>
         </div>
         <div>
-          <b-form-input v-model="form.email" class="my-input email" placeholder="Email"></b-form-input>
-        </div>
-        <div>
           <b-form-input v-model="form.name" class="my-input name" placeholder="Имя"></b-form-input>
+        </div>
+        <div class="brands">
+          <b-select @change="getModels"  class="form-select my-input"
+                     v-model="form.brand"
+                     :options="brands"></b-select>
+        </div>
+        <div class="models">
+          <b-select  class="form-select my-input"
+                     v-model="form.model"
+                     :options="models"></b-select>
         </div>
         <div>
           <b-form-select class="form-select my-select my-input" v-model="form.isBlocked" :options="isBlocked"></b-form-select>
@@ -17,30 +24,26 @@
         <div>
           <b-form-select class="form-select my-select my-input" v-model="form.isDeleted" :options="isDeleted"></b-form-select>
         </div>
-        <div>
-          <b-form-select class="form-select my-select my-input" v-model="form.role" :options="roles"></b-form-select>
-        </div>
         <div class="grow"></div>
         <div>
-          <div class="button-wrapper mt-1 ">
-            <img @click="search()" class=" search-button" src="../assets/search.svg" />
+          <div @click="search()"  class="button-wrapper mt-1">
+            <img class=" search-button" src="../assets/search.svg" />
           </div>
         </div>
       </b-form>
     </div>
     <div class="ads">
-      <p class="p-0 m-0">Поиск по объявлениям</p>
-      <a href="/admin/cars"><b-button variant="light">Искать</b-button></a>
-      <!--          todo transports search-->
+      <p class="p-0 m-0">Поиск по пользователям</p>
+      <a href="/admin"><b-button variant="light">Искать</b-button></a>
     </div>
   </div>
 </template>
 
 <script>
-import router from "@/router";
+import router from "../router";
 
 export default {
-  name: "AdminSearch",
+  name: "AdminSearchCars",
   data() {
     return {
       form: {
@@ -49,7 +52,8 @@ export default {
         isDeleted: null,
         isBlocked: null,
         role: null,
-        name: null,
+        brand: 0,
+        model: 0
       },
       roles: [
         { value: null, text: "Выбрать роль"},
@@ -66,21 +70,20 @@ export default {
         { value: true, text: "Да"},
         { value: false, text: "Нет"},
       ],
+      brands: [],
+      models: [],
     }
   },
   methods: {
     async search() {
-      if (this.form.email === '') {
-        this.form.email = null;
+      if (this.form.brand === 0) {
+        this.form.brand = null
       }
-      if (this.form.name === '') {
-        this.form.name = null;
-      }
-      if (this.form.id === '') {
-        this.form.id = null;
+      if (this.form.model === 0) {
+        this.form.model = null
       }
       const request = new Request(
-          "http://localhost/admin/search",
+          "http://localhost/admin/car-search",
           {
             method: "POST",
             headers: {
@@ -96,16 +99,86 @@ export default {
 
       if (response.status === 200) {
         response.text().then(data => {
-          this.$store.state.users = JSON.parse(data);
+          this.$store.state.cars = JSON.parse(data);
           this.$forceUpdate()
-          router.push("/admin#users")
+          router.push("/admin/cars#cars");
+          this.form.model = 0;
+          this.form.brand = 0;
         })
       } else {
-        router.push("/error/default")
+        await router.push("/error/default")
       }
-    }
-  }
+    },
+    async getBrands() {
 
+      var request = new Request(
+          "http://localhost/car/brands",
+          {
+            method: "GET",
+          }
+      );
+      if (this.$store.state.token !== null) {
+        request.headers.append("Authorization", this.$store.state.token);
+      }
+      var response = await fetch(request);
+      if (response.status === 200) {
+        response.json().then(data => {
+          this.brands = data.reduce((opts, brand) => {
+            opts.push({
+              "value": brand['id'],
+              "text": brand['name']
+            })
+            return opts;
+          }, []);
+          this.brands.push({
+            "value": 0,
+            "text": 'Выберите марку'
+          })
+          this.$forceUpdate()
+        })
+      } else {
+        await router.push("/error/default")
+      }
+    },
+    async getModels() {
+this.form.model = 0;
+      var request = new Request(
+          "http://localhost/car/" + this.form.brand + "/models",
+          {
+            method: "GET",
+          }
+      );
+      if (this.$store.state.token !== null) {
+        request.headers.append("Authorization", this.$store.state.token);
+      }
+      var response = await fetch(request);
+      if (response.status === 200) {
+        response.json().then(data => {
+          this.models = data.reduce((opts, model) => {
+            opts.push({
+              "value": model['id'],
+              "text": model['name']
+            })
+            return opts;
+          }, []);
+          this.models.push({
+            "value": 0,
+            "text": 'Выберите модель'
+          })
+          this.$forceUpdate()
+        })
+      } else {
+        await router.push("/error/default")
+      }
+    },
+  },
+  async beforeMount() {
+    await this.getBrands();
+    this.models.push({
+      "value": 0,
+      "text": 'Выберите модель'
+    })
+  }
 }
 </script>
 
@@ -122,7 +195,7 @@ export default {
 .search-wrapper {
   font-family: 'Roboto Mono', monospace;
   margin: auto;
-  width: 75%;
+  width: 80%;
   background-color: white;
   height: 58px;
   border-radius: 50px;
@@ -198,5 +271,8 @@ input[type=text] {
 
 .grow {
   flex-grow: 8;
+}
+.brands {
+  width: 250px;
 }
 </style>

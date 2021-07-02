@@ -6,10 +6,10 @@
       </a>
     </div>
     <div>
-      <button class="tab pb-1" v-bind:style="notDriverBorder" @click="changeNotDriver()">Арендовать транспорт</button>
+      <button class="tab pb-1" v-bind:style="notDriverBorder" @click="changeNotDriver()">Арендовать авто</button>
     </div>
     <div>
-      <button class="tab pb-1" v-bind:style="driverBorder" @click="changeDriver()">Не хочу быть за штурвалом</button>
+      <button class="tab pb-1" v-bind:style="driverBorder" @click="changeDriver()">Не хочу быть за рулем</button>
     </div>
     <div>
       <div class="profile-button" @click="openMenu()">

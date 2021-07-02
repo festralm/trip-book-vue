@@ -52,9 +52,9 @@
         <p class="info-name">Оставленные отзывы</p>
         <div class="review" v-for="(review, key) in user.reviews" v-bind:review="review" v-bind:key="key">
           <div class="review-user">
-            <a class="me-3 mb-3" v-bind:href="`/transports/cars/${review.car.id}`"><img :src="require(`../assets/${review.car.carPhotoUrls[0]}`)"/></a>
+            <a class="me-3 mb-3" v-bind:href="`/admin/cars/${review.car.id}`"><img :src="require(`../assets/${review.car.carPhotoUrls[0]}`)"/></a>
             <div>
-              <a v-bind:href="`/transports/cars/${review.car.id}`">{{review.car.name}}</a>
+              <a v-bind:href="`/admin/cars/${review.car.id}`">{{review.car.name}}</a>
               <br>
               <p class="p-0 m-0">{{review.car.brand}} {{review.car.model}}</p>
               <p class="year p-0 m-0">{{months[new Date(review.datetime).getMonth()]}} {{new Date(review.datetime).getFullYear()}}г.</p>

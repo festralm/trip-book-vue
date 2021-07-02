@@ -1,12 +1,12 @@
 <template>
   <div class="rent" id="rent">
-    <div v-if="$store.state.transportForm['type'] === 1" class="left">
+    <div  class="left">
       <div class="text">
         <p class="name ">Вы планируете сдавать машину с водителем или без водителя?</p>
       </div>
     </div>
     <div class="right">
-      <div v-if="$store.state.transportForm['type'] === 1" class="types">
+      <div class="types">
         <b-button @click="choose(true)" v-bind:class="{chosen: $store.state.transportForm['withDriver']}" variant="outline-secondary"
                   class="my-button my-3 text-center">
           С водителем

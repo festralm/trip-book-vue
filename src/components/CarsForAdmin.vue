@@ -1,20 +1,20 @@
 <template>
   <div class="car-container" v-if="list !== null && list !== undefined && list.length > 0">
     <div class="car" v-for="(car, key) in list" v-bind:car="car" :key="key">
-      <a v-bind:href="`/transports/cars/${car.id}`">
+      <a v-bind:href="`/admin/cars/${car.id}`">
         <img class="car-photo" :src="require(`../assets/${car.carPhotoUrls[0]}`)"/>
       </a>
       <div class="rating-container">
         <div class="car-image">
-          <a v-bind:href="`/transports/cars/${car.id}`"><img src="../assets/rating.png"></a>
+          <a v-bind:href="`/admin/cars/${car.id}`"><img src="../assets/rating.png"></a>
         </div>
         <div class="top ">
-          <a v-bind:href="`/transports/cars/${car.id}`" class="ps-2  button">{{car.rating}} ({{car.reviews.length}} отзывов)</a>
+          <a v-bind:href="`/admin/cars/${car.id}`" class="ps-2  button">{{car.rating}} ({{car.reviews.length}} отзывов)</a>
         </div>
       </div>
-      <a v-bind:href="`/transports/cars/${car.id}`">{{car.name}}</a>
+      <a v-bind:href="`/admin/cars/${car.id}`">{{car.name}}</a>
       <br>
-      <a  v-bind:href="`/transports/cars/${car.id}`">{{car.brand}} {{car.model}}</a>
+      <a  v-bind:href="`/admin/cars/${car.id}`">{{car.brand}} {{car.model}}</a>
       <b-button class="car-button" @click="blockCar(car)" v-if="car.isBlocked === false"
                 variant="outline-danger" >Заблокировать</b-button>
       <b-button class="car-button" @click="unblockCar(car)" v-else

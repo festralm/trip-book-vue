@@ -1,7 +1,7 @@
 <template>
   <div class="transport-list-wrapper mb-3">
     <div class="cars list">
-      <a href="/" class="type p-0 m-0">Легковые автомобили ></a>
+      <p href="/" class="type p-0 m-0">Лучшие автомобили</p>
 <!--      todo search-->
       <div class="list-wrapper mt-4">
         <div class="car" v-for="(car, key) in $store.state.cars" v-bind:car="car" :key="key">
@@ -58,9 +58,6 @@ export default {
   font-family: 'Roboto Mono', monospace;
   font-size: 30px;
   font-weight: 600;
-  cursor: pointer;
-  color: black;
-  text-decoration: none;
 }
 
 .list-wrapper {

@@ -1,5 +1,5 @@
 <template>
-  <profile v-bind:id="null"></profile>
+  <profile v-bind:id="null" @updateMenu="$emit('updateMenu')"></profile>
 </template>
 
 <script>

@@ -51,6 +51,7 @@ export default {
   },
   methods: {
     async signIn() {
+      this.form.joined = new Date().getTime();
       const request = new Request(
           "http://localhost/sign-in",
           {

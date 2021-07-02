@@ -1,5 +1,5 @@
 <template>
-  <div class="users-for-admin mt-5 pt-5 mb-3">
+  <div class="users-for-admin mt-5 pt-5 mb-3" id="users">
     <div class="sort-container pb-5">
       <div ><b-select @change="sort()" class="px-3 my-select" v-model="sortType" :options="sortOptions"></b-select></div>
       <div ><b-select @change="sort()" class="px-3 my-select" v-model="sortObject" :options="objectOptions"></b-select></div>
@@ -7,10 +7,12 @@
     <div class="users-container">
       <div class="user pt-3 " v-for="(user, key) in $store.state.users" v-bind:user="user" :key="key">
         <a v-bind:href="`/admin/users/${user.id}`">
-        <img class="image pb-2" width="200px" :src="require(`../assets/${user.photoUrl}`)"/>
+        <img class="image pb-2" :src="require(`../assets/${user.photoUrl}`)"/>
         </a>
         <div class="text-container text-center">
           <a v-bind:href="`/admin/users/${user.id}`" class="px-1 mb-1">ID: {{user.id}}</a>
+          <a v-if="user.name !== null && user.name !== ''" v-bind:href="`/admin/users/${user.id}`"
+             class="px-1 mb-1">{{user.name}}</a>
           <a v-bind:href="`/admin/users/${user.id}`" class="px-1">{{user.email}}</a>
         </div>
       </div>
@@ -129,7 +131,13 @@ export default {
 
 .image {
   cursor: pointer;
-  border-radius: 20px;
+  border-radius: 50%;
+}
+
+img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
 }
 
 .text-container {
