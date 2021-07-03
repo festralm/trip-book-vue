@@ -84,6 +84,7 @@ export default {
   width: 100%;
 }
 .my-input {
+  min-height: 403px;
   margin: 150px auto 113px auto;
   width: 70%;
 

@@ -24,6 +24,8 @@ import UsersProfile from "../layouts/UsersProfile";
 import AdminCar from "../views/AdminCar";
 import AdminCars from "../views/AdminCars";
 import CarSearch from "../views/CarSearch";
+import Messages from "../views/Messages";
+import Notifications from "../views/Notifications";
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -162,13 +164,18 @@ const routes = [
       },
       {
         path: '/messages',
-        name: 'CarSearch',
-        component: CarSearch,
+        name: 'Messages',
+        component: Messages,
+      },
+      {
+        path: '/messages/:id',
+        name: 'Messages',
+        component: Messages,
       },
       {
         path: '/notifications',
-        name: 'CarSearch',
-        component: CarSearch,
+        name: 'Notifications',
+        component: Notifications,
       },
     ]
   },
