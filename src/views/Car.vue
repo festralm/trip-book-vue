@@ -1,6 +1,7 @@
 <template>
   <div class="car">
-    <p class="name pt-4">{{car['name']}}</p>
+    <p v-if="!editing" class="name pt-4">{{car['name']}}</p>
+    <b-input v-else v-model="carEdit.name" class="mt-4 mb-2 name-input"></b-input>
     <div class="top-container">
       <div class="image">
         <a href="#rating">
@@ -21,19 +22,40 @@
       </div>
       <div class="top">
         <p>Адрес</p>
+
+        <!--        edit address-->
       </div>
       <div class="right"></div>
-      <div v-if="favorite" class="image button">
-        <img src="../assets/heart.png">
+      <div class="fav" v-if="!myCar">
+        <div v-if="favorite" class="image button">
+          <img src="../assets/heart.png">
+        </div>
+        <div v-else class="image button">
+          <img src="../assets/heart-empty.png">
+        </div>
+        <div v-if="favorite" class="top px-3">
+          <p class="button" @click="deleteWishlist(car.id)">Сохранено</p>
+        </div>
+        <div v-else class="top px-3">
+          <p class="button" @click="saveWishlist(car.id)">Сохранить</p>
+        </div>
       </div>
-      <div v-else class="image button">
-        <img src="../assets/heart-empty.png">
-      </div>
-      <div v-if="favorite" class="top px-3">
-        <p class="button" @click="deleteWishlist(car.id)">Сохранено</p>
-      </div>
-      <div v-else class="top px-3">
-        <p class="button" @click="saveWishlist(car.id)">Сохранить</p>
+      <div v-else>
+        <div v-if="!editing" class="edit-buttons">
+          <b-button class="edit-button me-2"
+                    variant="outline-secondary" @click="edit()">Редактировать</b-button>
+          <b-button class="edit-button "
+                    variant="outline-danger" @click="open = true">Удалить объявление</b-button>
+          <delete-car-popup v-bind:open="open" @revertDeletingCar="open = false"
+                            @deleteCar="deleteCar(car.id)">
+          </delete-car-popup>
+        </div>
+        <div v-else class="edit-buttons">
+          <b-button class="revert-button me-2"
+                    variant="outline-danger" @click="editing = false">Отменить</b-button>
+          <b-button class="save-button"
+                    variant="outline-success" @click="saveEdit(car.id)">Сохранить</b-button>
+        </div>
       </div>
     </div>
     <div class="photo-container ">
@@ -77,13 +99,20 @@
       <div class="left ms-3">
         <div class="description">
           <p class="brand">{{ car['brand'] }} {{car['model']}}</p>
-          <p class="with-driver">·
+          <p v-if="!editing" class="with-driver">·
             <span v-if="car['withDriver'] === true">Автомобиль с водителем</span>
             <span v-else>Автомобиль без водителя</span>
             ·
           </p>
+          <div class="buttons" v-else>
+            <b-button v-if="carEdit.withDriver" variant="outline-secondary" @click="carEdit.withDriver = false">
+              Сдавать без водителя</b-button>
+            <b-button v-else variant="outline-primary"  @click="carEdit.withDriver = true">
+              Сдавать с водителем</b-button>
+          </div>
           <hr class="my-4 hr">
-          <p>{{car['description']}}</p>
+          <p v-if="!editing"> {{car['description']}}</p>
+          <b-textarea class="description-area" v-else no-resize v-model="carEdit.description"></b-textarea>
           <hr class="my-4 hr">
         </div>
         <div class="user mt-5">
@@ -94,22 +123,48 @@
         </div>
       </div>
       <div class="rent ">
-        <p ><span class="price" >{{getPrice(car['price'])}}₽</span> / <span v-if="car['forHour']">в час</span><span v-else>в сутки</span> </p>
-
-        <div class="calendar-container">
+        <p v-if="!editing">
+          <span  class="price" >{{getPrice(car['price'])}}₽</span> / <span v-if="car['forHour']">в час</span><span v-else>в сутки</span> </p>
+        <div v-else class="price-edit text-center">
+          <b-input class="price-input py-0 mb-3" type="number" v-model="carEdit.price"></b-input>
+          <b-button class="price-button" variant="outline-primary" v-if="carEdit.forHour"
+                    @click="carEdit.forHour = false">Сдавать посуточно</b-button>
+          <b-button class="price-button" variant="outline-secondary" @click="carEdit.forHour = true"
+                    v-else>Сдавать почасово</b-button>
+        </div>
+        <div class="calendar-container text-center">
           <div class="me-3">
-            <p class="p-0 m-1 text-center">Выберите даты</p>
-            <v-date-picker
+            <p v-if="!myCar" class="p-0 m-1 text-center">Выберите даты</p>
+            <v-date-picker v-if="!editing"
                 :value="null"
                 color="red"
                 v-bind:mode="car.forHour === true ? 'dateTime' : 'date'"
                 v-bind:disabled-dates="car.books"
                 is-range
                 v-model="range"
+                           :attributes="myBooks"
+                           @input="booked = null"
             />
+            <p v-if="editing" class="mt-2">Поменять срок аренды</p>
+            <div v-if="editing" class="my-input text-center">
+              <v-date-picker @input="checkDates()"
+                             :attributes="attrs"
+                             :value="null"
+                             color="red"
+                             v-bind:mode="carEdit.forHour === true ? 'dateTime' : 'date'"
+                             :available-dates="[{
+                  start: new Date() ,
+                  end: null
+                },
+                ]"
+                             is-range
+                             v-model="carEdit.range"
+              />
+              <p v-if="dateError !== null">{{dateError}}</p>
+            </div>
           </div>
         </div>
-        <div class="total-price mt-2 ">
+        <div v-if="!myCar"  class="total-price mt-2 ">
           <div v-if="range.start !== null && range.end !== null && this.car.forHour && getTimeAmount() !== 0">
             <div class="total-price-container">
               <p class="text-decoration-underline">{{car.price}} x {{getTimeAmount()}} <span v-if="car.forHour">часа</span><span v-else>сутки</span></p>
@@ -118,12 +173,14 @@
             </div>
           </div>
         </div>
-        <div class="rent-button ">
+        <div v-if="!myCar"  class="rent-button ">
           <b-button v-bind:disabled="this.range.start === null || this.range.end === null ||
 this.car.forHour && getTimeAmount() === 0"
                     variant="outline-danger" class="rent-button" @click="book()">Забронировать</b-button>
         </div>
+        <div class="booked text-center mt-2" v-if="booked"><p class="mb-0 pb-0">Забронировано!</p></div>
       </div>
+
     </div>
     <div class="rating" id="rating">
       <div class="rating-top-container">
@@ -132,7 +189,7 @@ this.car.forHour && getTimeAmount() === 0"
                width="18" height="18"
                viewBox="0 0 226 226"
                style=" fill:#000000;">
-            <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal">
+            <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none"  font-size="none" style="mix-blend-mode: normal">
               <path d="M0,226v-226h226v226z" fill="none">
               </path>
               <g fill="#f1c40f">
@@ -160,7 +217,7 @@ this.car.forHour && getTimeAmount() === 0"
           </div>
         </div>
       </div>
-      <div v-if="booked" class="review-and-rate">
+      <div v-if="!myCar && booked" class="review-and-rate">
         <p class="leave-review p-0 m-0">Оставьте свой отзыв</p>
         <b-textarea class="review-text mt-3" v-model="reviewForm.text"></b-textarea>
         <div class="review-bottom mt-4">
@@ -288,18 +345,31 @@ this.car.forHour && getTimeAmount() === 0"
 
 <script >
 import router from "@/router";
+import DeleteCarPopup from "../components/DeleteCarPopup";
 
 
 export default {
   name: "Car",
+  components: {DeleteCarPopup},
   data() {
     return {
+      attrs: [],
       favorite: false,
       reviewForm: {
         text: null,
         rating: 0,
         date: null,
       },
+      editing: false,
+      dateError: null,
+      carEdit: {
+        range: {
+          start: null,
+          end: null
+        }
+      },
+      myBooks: [],
+      myCar: false,
       booked: false,
       star1: false,
       star2: false,
@@ -320,6 +390,7 @@ export default {
         'ноябрь',
         'декабрь',
       ],
+      open: false,
       user: {
         id: 0,
         email: '',
@@ -356,6 +427,140 @@ export default {
     }
   },
   methods: {
+    getNormalDate(date, start) {
+      if (start) {
+        var hour = 0;
+        var minute = 0;
+        var second = 0;
+        var ms = 0;
+      } else {
+        hour = 23;
+        minute = 59;
+        second = 59;
+        ms = 999;
+      }
+      if (this.car.forHour) {
+        hour = date.getHours();
+      }
+      return new Date(date.getFullYear(), date.getMonth(), date.getDate(),
+          hour, minute, second, ms).getTime()
+    },
+    checkDates() {
+      this.carEdit.range.start = this.getNormalDate(new Date(this.carEdit.range.start), true)
+      this.carEdit.range.end = this.getNormalDate(new Date(this.carEdit.range.end), false)
+      this.dateError = null;
+      for (var i = 0; i < this.car.books.length; i++) {
+        if (this.car.books[i].start !== null && this.car.books[i].start !== 0 &&
+            this.car.books[i].end !== null && this.car.books[i].end !== 0
+        && this.car.books[i].end >= new Date().getTime()) {
+          if (this.carEdit.range.start > this.car.books[i].start ||
+              this.carEdit.range.end < this.car.books[i].end) {
+            this.dateError = 'Автомобиль на эту дату забронирован! Данные не будут изменены.';
+            return;
+          }
+        }
+      }
+      this.carEdit.start = this.carEdit.range.start;
+      this.carEdit.finish = this.carEdit.range.end;
+    },
+    async saveEdit(id) {
+      if (this.car.name === this.carEdit.name) {
+        this.carEdit.name = null;
+      }
+      if (this.car.carPhotoUrls === this.carEdit.carPhotoUrls) {
+        this.carEdit.carPhotoUrls = null;
+      }
+      if (this.car.withDriver === this.carEdit.withDriver) {
+        this.carEdit.withDriver = null;
+      }
+      if (this.car.description === this.carEdit.description) {
+        this.carEdit.description = null;
+      }
+      if (this.car.start === this.carEdit.start) {
+        this.carEdit.start = null;
+      }
+      if (this.car.finish === this.carEdit.finish) {
+        this.carEdit.finish = null;
+      }
+      if (this.car.price === this.carEdit.price) {
+        this.carEdit.price = null;
+      }
+      if (this.car.forHour === this.carEdit.forHour) {
+        this.carEdit.forHour = null;
+      }
+      const request = new Request(
+          'http://localhost/car/edit/' + id,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(this.carEdit),
+          }
+      );
+      if (this.$store.state.token !== null) {
+        request.headers.append("Authorization", this.$store.state.token);
+      }
+      const response = await fetch(request);
+      if (response.status === 200) {
+        this.car = await response.json();
+        this.editBooks()
+        this.editing = false;
+      } else {
+        await router.push("/error/default")
+      }
+      this.$forceUpdate()
+    },
+    edit() {
+      this.carEdit = Object.assign({}, this.car);
+      var start = this.car.start > new Date().getTime() ? this.car.start : new Date().getTime();
+      for (var d = start; d <= this.car.finish; d += 1000 * 60 * 60 * 24) {
+        this.attrs.push(
+            {
+              highlight: {
+                color: 'purple',
+                fillMode: 'light',
+              },
+              dates: d,
+            });
+      }
+      for (var i = 0; i < this.car.books.length; i++) {
+        if (this.car.books[i].start !== null && this.car.books[i].start !== 0
+        && this.car.books[i].end != null && this.car.books[i].end !== 0) {
+          console.log(this.car.books[i])
+          for ( d = this.car.books[i].start; d <= this.car.books[i].end; d += 1000 * 60 * 60 * 24) {
+            if (d <= this.car.books[i].end) {
+              this.attrs.push(
+                  {
+                    highlight: {
+                      color: 'red',
+                      fillMode: 'light',
+                    },
+                    dates: d,
+                  });
+            }
+          }
+        }
+      }
+      this.editing = true;
+    },
+    async deleteCar(id) {
+      const request = new Request(
+          'http://localhost/car/' + id,
+          {
+            method: "DELETE",
+          }
+      );
+      if (this.$store.state.token !== null) {
+        request.headers.append("Authorization", this.$store.state.token);
+      }
+      const response = await fetch(request);
+      if (response.status === 200) {
+        await router.push("/my-transport")
+      } else {
+        await router.push("error/default")
+      }
+    },
     async sendReview() {
       const request = new Request(
           "http://localhost/car/review/" + this.car.id,
@@ -432,14 +637,6 @@ export default {
           break;
       }
     },
-    outStar() {
-      console.log("out")
-      this.star1 = false;
-      this.star2 = false;
-      this.star3 = false;
-      this.star4 = false;
-      this.star5 = false;
-    },
     async saveWishlist(id) {
       if (this.$store.state.authorised === null) {
         router.push("/sign-in")
@@ -466,34 +663,50 @@ export default {
       }
     },
     async book() {
-      const request = new Request(
-          "http://localhost/car/book/" + this.car.id,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(this.range),
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
-
-      if (response.status === 200) {
-        await response.text().then(data => {
-          this.car = JSON.parse(data);
-          this.editBooks()
-        })
+      if (this.$store.state.authorised === null) {
+        router.push("/sign-in")
       } else {
-        await router.push("/error/default")
+        this.range.start = this.getNormalDate(this.range.start, true)
+        this.range.end = this.getNormalDate(this.range.end, false)
+        const request = new Request(
+            "http://localhost/car/book/" + this.car.id,
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(this.range),
+            }
+        );
+        if (this.$store.state.token !== null) {
+          request.headers.append("Authorization", this.$store.state.token);
+        }
+        var response = await fetch(request);
+
+        if (response.status === 200) {
+          await response.text().then(data => {
+            this.car = JSON.parse(data);
+            this.editBooks()
+            this.myBooks.push(
+                {
+                  highlight: {
+                    start: { fillMode: 'outline' },
+                    base: { fillMode: 'light' },
+                    end: { fillMode: 'outline' },
+                  },
+                  dates: {start: this.range.start, end: this.range.end},
+                });
+            this.booked = true;
+          })
+        } else {
+          await router.push("/error/default")
+        }
       }
     },
     async editBooks() {
       this.car['start'] = (new Date() > new Date(this.car['start']) ? new Date() :
-          new Date(this.car['start'])) - 1000 * 60 * 60 * 24
-      this.car['finish'] = new Date(this.car['finish']).getTime() + 1000 * 60 * 60 * 24
+          new Date(this.car['start'])).getTime()
+      this.car['finish'] = new Date(this.car['finish']).getTime()
       this.car.books = this.car.books.map((x) => {
             return {
               start: new Date(x.start).getTime(),
@@ -504,10 +717,10 @@ export default {
       this.car.books.push(
           {
             start: null,
-            end: this.car['start']
+            end: this.car['start'] - 1000 * 60 * 60 * 24
           },
           {
-            start: this.car['finish'] ,
+            start: this.car['finish'] + 1000 * 60 * 60 * 24,
             end: null
           },
       )
@@ -579,7 +792,6 @@ export default {
       }
     },
     async getCar() {
-
       const request = new Request(
           "http://localhost/car/" + router.history.current.params['id'],
           {
@@ -590,12 +802,9 @@ export default {
         request.headers.append("Authorization", this.$store.state.token);
       }
       var response = await fetch(request);
-
       if (response.status === 200) {
-        await response.text().then(data => {
-          this.car = JSON.parse(data);
-          this.editBooks();
-        })
+          this.car = await response.json()
+        await this.editBooks();
       } else {
         await router.push("/error/default")
       }
@@ -616,13 +825,29 @@ export default {
         await response.text().then(data => {
           this.user = JSON.parse(data);
         })
+        for (var i = 0; i < this.user.books.length; i++) {
+          this.user.books[i].start = new Date(this.user.books[i].start).getTime();
+          this.user.books[i].finish = new Date(this.user.books[i].finish).getTime();
+          if (this.user.books[i].id === this.car.id &&
+              this.user.books[i].start !== null && this.user.books[i].start !== 0
+              && this.user.books[i].finish != null && this.user.books[i].finish !== 0) {
+            this.myBooks.push(
+                {
+                  highlight: {
+                    start: { fillMode: 'outline' },
+                    base: { fillMode: 'light' },
+                    end: { fillMode: 'outline' },
+                  },
+                  dates: {start: this.user.books[i].start, end: this.user.books[i].finish},
+                });
+          }
+        }
       } else {
         await router.push("/error/default")
       }
     }
   },
   async beforeMount() {
-
     this.$store.state.fixed = false;
     await this.getCar();
     if (this.$store.state.authorised === null) {
@@ -630,14 +855,13 @@ export default {
     } else {
       await this.getUser()
       await this.updateFavorite();
-      await this.editBooks();
       this.booked = this.user.books
           .filter(x => new Date(x.start).getTime() <= new Date())
           .filter(x => x.id === this.car.id)
           .length !== 0;
-      this.$forceUpdate()
     }
-    console.log(this.car)
+    this.myCar = this.user.cars.filter(x => x.id === this.car.id).length !== 0;
+    this.$forceUpdate()
   },
 }
 </script>
@@ -651,6 +875,10 @@ export default {
 
 .name {
   font-size: 25px;
+}
+.name-input {
+  font-size: 25px;
+  width: 300px;
 }
 
 .top-container, .rating-top-container {
@@ -934,4 +1162,24 @@ export default {
   padding: 10px;
   width: 547px;
 }
+
+.fav {
+  display: flex;
+}
+.edit-button, .revert-button, .save-button, .delete-button {
+  padding: 1px 3px 1px 3px;
+}
+
+.description-area {
+  height: 200px;
+}
+
+.price-input {
+  height: 30px;
+}
+
+.booked {
+font-size: 18px;
+}
+
 </style>

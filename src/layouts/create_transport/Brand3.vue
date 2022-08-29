@@ -1,12 +1,12 @@
 <template>
   <div class="rent" id="rent">
-    <div v-if="$store.state.transportForm['type'] === 1" class="left">
+    <div class="left">
       <div class="text">
         <p class="name">Автомобиль какой марки вы желаете сдать в аренду?</p>
       </div>
     </div>
     <div class="right">
-      <div v-if="$store.state.transportForm['type'] === 1" class="brands">
+      <div class="brands">
           <b-select  class="form-select"
                     v-model="$store.state.transportForm['brand']"
                     :options="options"></b-select>

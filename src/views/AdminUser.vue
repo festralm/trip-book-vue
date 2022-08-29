@@ -1,5 +1,5 @@
 <template>
-  <user-for-admin v-bind:is-admin="true" ></user-for-admin>
+  <user-for-admin  ></user-for-admin>
 </template>
 
 <script>

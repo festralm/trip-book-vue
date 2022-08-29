@@ -11,7 +11,7 @@
         <v-date-picker
           :value="null"
           color="red"
-          v-bind:mode="$store.state.transportForm.forHour === true ? 'dateTime' : 'date'"
+          v-bind:mode="$store.state.transportForm.forHour === 'true' ? 'dateTime' : 'date'"
           :available-dates="[{
                   start: new Date() ,
                   end: null
@@ -41,7 +41,6 @@ export default {
     }
   },
   methods: {
-
   }
 }
 </script>

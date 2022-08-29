@@ -10,6 +10,8 @@ import VCalendar from 'v-calendar';
 import vuetify from 'vuetify' // path to vuetify export
 import Calendar from 'v-calendar/lib/components/calendar.umd'
 import DatePicker from 'v-calendar/lib/components/date-picker.umd'
+import VueModalTor from "vue-modaltor/dist/vue-modaltor.common";
+import "vue-modaltor/dist/vue-modaltor.css";
 
 Vue.use(VueRouter)
 Vue.use(PortalVue)
@@ -17,6 +19,9 @@ Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(Vuex)
 Vue.use(VCalendar);
+Vue.use(VueModalTor, {
+  bgPanel: "#7957d5"  // add custome options
+});
 Vue.component('calendar', Calendar)
 Vue.component('date-picker', DatePicker)
 

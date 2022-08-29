@@ -9,7 +9,6 @@ import AuthLayout from "../layouts/AuthLayout";
 import DefaultLayout from "../layouts/DefaultLayout";
 import RentTransport from "@/views/RentTransport";
 import ZeroStep0 from "@/layouts/create_transport/ZeroStep0";
-import Type1 from "@/layouts/create_transport/Type1";
 import WithDriver2 from "@/layouts/create_transport/WithDriver2";
 import Brand3 from "@/layouts/create_transport/Brand3";
 import Model4 from "@/layouts/create_transport/Model4";
@@ -22,6 +21,8 @@ import MyTransport from "../layouts/MyTransport";
 import Trips from "../layouts/Trips";
 import MyProfile from "../layouts/MyProfile";
 import UsersProfile from "../layouts/UsersProfile";
+import AdminCar from "../views/AdminCar";
+import AdminCars from "../views/AdminCars";
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -67,9 +68,19 @@ const routes = [
         component: Admin,
       },
       {
+        path: '/admin/cars',
+        name: 'AdminCars',
+        component: AdminCars,
+      },
+      {
         path: '/admin/users/:id',
         name: 'AdminUser',
         component: AdminUser
+      },
+      {
+        path: '/admin/cars/:id',
+        name: 'AdminCar',
+        component: AdminCar
       },
       {
         path: '/transports/cars/:id',
@@ -85,11 +96,6 @@ const routes = [
             path: '/rent-transport',
             name: 'RentTransportZero',
             component: ZeroStep0,
-          },
-          {
-            path: '/rent-transport',
-            name: 'RentTransportOne',
-            component: Type1,
           },
           {
             path: '/rent-transport',

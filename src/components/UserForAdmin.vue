@@ -32,25 +32,36 @@
         <p class="info-name mpt-5">Информация</p>
         <p class="description">{{ user.description }}</p>
       </div>
-      <div class="mb-5" v-if="user.cars !== null && user.cars !== undefined && user.cars.length > 0">
+      <div class="mb-5" >
         <hr class="hr my-4">
         <p class="info-name">Объявления</p>
-        <div class="car-container">
-          <div class="car" v-for="(car, key) in user.cars" v-bind:car="car" :key="key">
-            <a v-bind:href="`/transports/cars/${car.id}`">
-              <img class="car-photo" :src="require(`../assets/${car.carPhotoUrls[0]}`)"/>
-            </a>
-            <div class="rating-container">
-              <div class="car-image">
-                <a v-bind:href="`/transports/cars/${car.id}`"><img src="../assets/rating.png"></a>
-              </div>
-              <div class="top ">
-                <a v-bind:href="`/transports/cars/${car.id}`" class="ps-2  button">{{car.rating}} ({{car.reviews.length}} отзывов)</a>
-              </div>
+        <cars-for-admin v-bind:list="user.cars"></cars-for-admin>
+      </div>
+      <div class="mb-5" >
+        <hr class="hr my-4">
+        <p class="info-name">Список желаний</p>
+        <cars-for-admin v-bind:list="user.wishlist"></cars-for-admin>
+      </div>
+      <div class="mb-5" >
+        <hr class="hr my-4">
+        <p class="info-name">Поездки</p>
+        <cars-for-admin  v-bind:list="user.books"></cars-for-admin>
+      </div>
+      <div class="review-list">
+        <hr class="hr my-4">
+        <p class="info-name">Оставленные отзывы</p>
+        <div class="review" v-for="(review, key) in user.reviews" v-bind:review="review" v-bind:key="key">
+          <div class="review-user">
+            <a class="me-3 mb-3" v-bind:href="`/admin/cars/${review.car.id}`"><img :src="require(`../assets/${review.car.carPhotoUrls[0]}`)"/></a>
+            <div>
+              <a v-bind:href="`/admin/cars/${review.car.id}`">{{review.car.name}}</a>
+              <br>
+              <p class="p-0 m-0">{{review.car.brand}} {{review.car.model}}</p>
+              <p class="year p-0 m-0">{{months[new Date(review.datetime).getMonth()]}} {{new Date(review.datetime).getFullYear()}}г.</p>
             </div>
-            <a v-bind:href="`/transports/cars/${car.id}`">{{car.name}}</a>
-            <br>
-            <a v-bind:href="`/transports/cars/${car.id}`">{{car.brand}} {{car.model}}</a>
+          </div>
+          <div class="review-description">
+            <p>{{review.text}}</p>
           </div>
         </div>
       </div>
@@ -60,12 +71,28 @@
 
 <script>
 import router from "../router";
+import CarsForAdmin from "./CarsForAdmin";
 
 export default {
   name: "UserForAdmin",
+  components: {CarsForAdmin},
   data() {
     return {
-      user: {}
+      user: {},
+      months: [
+        'январь',
+        'февраль',
+        'март',
+        'апрель',
+        'май',
+        'июнь',
+        'июль',
+        'август',
+        'сентябрь',
+        'октябрь',
+        'ноябрь',
+        'декабрь',
+      ],
     }
   },
   methods: {
@@ -80,9 +107,9 @@ export default {
       if (this.$store.state.token !== '') {
         request.headers.append("Authorization", this.$store.state.token);
       }
-      var response = await fetch(request);
+      const response = await fetch(request);
       if (response.status === 200) {
-        response.json().then(data => {
+        await response.json().then(data => {
           this.user = data
         })
       } else {
@@ -213,6 +240,7 @@ export default {
   },
   async beforeMount() {
     await this.getUserForAdmin();
+    this.user.cars.sort((x, y) => y.rating - x.rating)
   }
 }
 </script>
@@ -245,21 +273,7 @@ export default {
 .image img{
   width: 17px;
 }
-.top {
-  font-size: 17px;
-  padding-top: 3px;
-}
-.top a {
-  text-decoration: none;
-  color: black;
-}
-.button:hover {
-  cursor: pointer;
-  color: #b8a7a7;
-}
-.rating-container {
-  display: flex;
-}
+
 
 .my-button {
   width: 100%;
@@ -288,34 +302,40 @@ export default {
   color: #b8a7a7;
 }
 
-.car-container {
-  display: flex;
-  width: 600px;
-  flex-wrap: wrap;
-}
-
-.car-photo {
-  width: 280px;
-  height: 170px;
+.review-user img {
+  width: 60px;
+  height: 60px;
+  margin-top: 10px;
+  border-radius: 50%;
   object-fit: cover;
-  border-radius: 20px;
-  margin-bottom: 10px;
 }
-.car {
-  width: 280px;
-  margin: 0 10px 30px 10px;
+.review-user {
+  display: flex;
 }
 
-.car a {
+.review-user a {
   text-decoration: none;
   color: black;
-  font-size: 15px;
+  font-size: 18px;
 }
 
-.car a:hover, .car p:hover {
+.review-user .year {
+  font-size: 15px;
   color: #b8a7a7;
 }
-.car-image img{
-  width: 15px;
+
+.review-user a:hover {
+  color: #b8a7a7;
+}
+
+.review-description {
+  font-size: 17px;
+}
+
+.review {
+  width: 600px;
+  margin-top: 20px;
+  padding: 20px;
+  box-shadow: 0 0px 10px 1px #dedede;
 }
 </style>
