@@ -121,6 +121,19 @@
             <img class="user-photo" :src="require(`../assets/${car.user.photoUrl}`)">
           </a>
         </div>
+        <div class="map-container mt-4" >
+          <GmapMap
+              class="map"
+              :center="{lat: car.lat, lng: car.lng}"
+              :zoom="7"
+          >
+            <GmapMarker
+                :position="{lat: car.lat, lng: car.lng}"
+                :clickable="false"
+                :draggable="false"
+            />
+
+          </GmapMap></div>
       </div>
       <div class="rent ">
         <p v-if="!editing">
@@ -353,6 +366,12 @@ export default {
   components: {DeleteCarPopup},
   data() {
     return {
+      map: null,
+      myCoordinates: {
+        lat: 0,
+        lng: 0,
+      },
+      zoom: 7,
       attrs: [],
       favorite: false,
       reviewForm: {
@@ -1035,6 +1054,7 @@ export default {
   border: 1px solid #b8a7a7;
   box-shadow: 0 0px 20px 1px #dedede;
   padding: 30px;
+  height: 100%;
 }
 
 .price {
@@ -1181,5 +1201,8 @@ export default {
 .booked {
 font-size: 18px;
 }
-
+.map {
+  width: 600px ;
+  height: 300px;
+}
 </style>

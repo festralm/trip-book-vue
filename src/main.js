@@ -12,6 +12,10 @@ import Calendar from 'v-calendar/lib/components/calendar.umd'
 import DatePicker from 'v-calendar/lib/components/date-picker.umd'
 import VueModalTor from "vue-modaltor/dist/vue-modaltor.common";
 import "vue-modaltor/dist/vue-modaltor.css";
+import VueGeolocation from 'vue-browser-geolocation';
+import * as VueGoogleMaps from 'vue2-google-maps';
+import GmapCluster from 'vue2-google-maps/dist/components/cluster' // replace src with dist if you have Babel issues
+
 
 Vue.use(VueRouter)
 Vue.use(PortalVue)
@@ -24,6 +28,16 @@ Vue.use(VueModalTor, {
 });
 Vue.component('calendar', Calendar)
 Vue.component('date-picker', DatePicker)
+Vue.use(VueGeolocation)
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyA0TS0PmrFkAAVD0QrbWPM8lRoO9JbxaEU',
+    region: 'RU',
+    language: 'ru',
+  },
+  // installComponents: false,
+})
+Vue.component('GmapCluster', GmapCluster)
 
 const store = new Vuex.Store({
   state: {
@@ -48,9 +62,18 @@ const store = new Vuex.Store({
       'finish': null,
       'carPhotoUrls': [],
       'range': null,
+      'lat': null,
+      'lng': null
     },
     cars: [],
     addresses: [],
+    carSearch: {
+      start: null,
+      finish: null,
+      brand: 0,
+      model: 0
+    },
+    chosenCar: null,
   }
 })
 

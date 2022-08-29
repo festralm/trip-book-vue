@@ -1,17 +1,13 @@
 <template >
   <div class="menu-container" v-bind:class="{fixed: $store.state.fixed}">
-    <div>
+    <div class="icon">
       <a href="/">
         <img width="130" src="../assets/Tripbook-logo/vector/default-monochrome-black.svg">
       </a>
     </div>
-    <div>
-      <button class="tab pb-1" v-bind:style="notDriverBorder" @click="changeNotDriver()">Арендовать авто</button>
+    <div class="grow">
     </div>
-    <div>
-      <button class="tab pb-1" v-bind:style="driverBorder" @click="changeDriver()">Не хочу быть за рулем</button>
-    </div>
-    <div>
+    <div class="menu">
       <div class="profile-button" @click="openMenu()">
         <img class="p-1" width="45" src="https://img.icons8.com/pastel-glyph/64/000000/gender-neutral-user.png"/>
       </div>
@@ -137,5 +133,17 @@ export default {
 .dropdown-container hr {
   color: #eedcdc;
   width: 100%;
+}
+
+.grow {
+  flex-grow: 8;
+}
+
+.icon {
+  margin-left: 200px;
+}
+
+.menu {
+  margin-right: 150px;
 }
 </style>

@@ -23,6 +23,7 @@ import MyProfile from "../layouts/MyProfile";
 import UsersProfile from "../layouts/UsersProfile";
 import AdminCar from "../views/AdminCar";
 import AdminCars from "../views/AdminCars";
+import CarSearch from "../views/CarSearch";
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -153,6 +154,21 @@ const routes = [
         path: '/users/:id',
         name: 'UsersProfile',
         component: UsersProfile,
+      },
+      {
+        path: '/search',
+        name: 'CarSearch',
+        component: CarSearch,
+      },
+      {
+        path: '/messages',
+        name: 'CarSearch',
+        component: CarSearch,
+      },
+      {
+        path: '/notifications',
+        name: 'CarSearch',
+        component: CarSearch,
       },
     ]
   },

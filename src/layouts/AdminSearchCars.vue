@@ -10,8 +10,8 @@
         </div>
         <div class="brands">
           <b-select @change="getModels"  class="form-select my-input"
-                     v-model="form.brand"
-                     :options="brands"></b-select>
+                    v-model="form.brand"
+                    :options="brands"></b-select>
         </div>
         <div class="models">
           <b-select  class="form-select my-input"
@@ -141,7 +141,7 @@ export default {
       }
     },
     async getModels() {
-this.form.model = 0;
+      this.form.model = 0;
       var request = new Request(
           "http://localhost/car/" + this.form.brand + "/models",
           {
