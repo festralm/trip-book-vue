@@ -2,11 +2,11 @@
   <div class="users-for-admin m-5 p-5 ">
     <div class="names-container">
       <b-row class="row-container text-center">
-        <b-col class="my-button col-1 p-2 fw-bold">
-          <div> {{names.id}}</div>
-        </b-col>
         <b-col class="my-button col-2 p-2 fw-bold">
-          <div> {{names.phoneNumber}}</div>
+          <div> {{names.photo}}</div>
+        </b-col>
+        <b-col class="my-button  col-1 p-2 fw-bold">
+          <div> {{names.id}}</div>
         </b-col>
         <b-col class="my-button col-2 p-2 fw-bold">
           <div> {{names.email}}</div>
@@ -24,11 +24,12 @@
     </div>
     <user-for-admin-search v-for="(user, key) in $store.state.users" v-bind:user="user" :key="key"></user-for-admin-search>
   </div>
+<!--  todo empty users list-->
 </template>
 
 <script>
 import router from "@/router";
-import UserForAdminSearch from "@/layouts/UserForAdminSearch";
+import UserForAdminSearch from "@/components/UserForAdminSearch";
 
 export default {
   name: "UsersForAdmin",
@@ -37,6 +38,7 @@ export default {
     return {
       names: {
         id: 'ID',
+        photo: 'Фото',
         phoneNumber: 'Номер телефона',
         email: 'Email',
         isBlocked: 'Заблокирован',
@@ -52,7 +54,7 @@ export default {
           method: "GET"
         }
     );
-    if (this.$store.state.token !== '') {
+    if (this.$store.state.token !== null) {
       request.headers.append("Authorization", this.$store.state.token);
     }
     var response = await fetch(request);
@@ -62,6 +64,7 @@ export default {
         this.$store.state.users = data;
       })
     }
+
   }
 }
 </script>

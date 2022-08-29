@@ -8,13 +8,14 @@ import AdminUser from "../views/AdminUser";
 import AuthLayout from "../layouts/AuthLayout";
 import DefaultLayout from "../layouts/DefaultLayout";
 import RentTransport from "@/views/RentTransport";
-import ZeroStepLayout from "@/layouts/ZeroStepLayout";
-import FirstStepLayout from "@/layouts/FirstStepLayout";
-import SecondStepLayout from "@/layouts/SecondStepLayout";
-import ThirdStepLayout from "@/layouts/ThirdStepLayout";
-import ForthStepLayout from "@/layouts/ForthStepLayout";
-import FifthStepLayout from "@/layouts/FifthStepLayout";
-import FinalStepLayout from "@/layouts/FinalStepLayout";
+import ZeroStep0 from "@/layouts/create_transport/ZeroStep0";
+import Type1 from "@/layouts/create_transport/Type1";
+import WithDriver2 from "@/layouts/create_transport/WithDriver2";
+import Brand3 from "@/layouts/create_transport/Brand3";
+import Model4 from "@/layouts/create_transport/Model4";
+import Address5 from "@/layouts/create_transport/Address5";
+import Final from "@/layouts/create_transport/Final";
+import Car from "@/views/Car";
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -65,6 +66,11 @@ const routes = [
         component: AdminUser
       },
       {
+        path: '/transports/cars/:id',
+        name: 'Car',
+        component: Car
+      },
+      {
         path: '/rent-transport',
         name: 'RentTransport',
         component: RentTransport,
@@ -72,37 +78,37 @@ const routes = [
           {
             path: '/rent-transport',
             name: 'RentTransportZero',
-            component: ZeroStepLayout,
+            component: ZeroStep0,
           },
           {
             path: '/rent-transport',
             name: 'RentTransportOne',
-            component: FirstStepLayout,
+            component: Type1,
           },
           {
             path: '/rent-transport',
             name: 'RentTransportTwo',
-            component: SecondStepLayout,
+            component: WithDriver2,
           },
           {
             path: '/rent-transport',
             name: 'RentTransportThree',
-            component: ThirdStepLayout,
+            component: Brand3,
           },
           {
             path: '/rent-transport',
             name: 'RentTransportFour',
-            component: ForthStepLayout,
+            component: Model4,
           },
           {
             path: '/rent-transport',
             name: 'RentTransportFive',
-            component: FifthStepLayout,
+            component: Address5,
           },
           {
             path: '/rent-transport',
             name: 'RentTransportSix',
-            component: FinalStepLayout,
+            component: Final,
           },
         ]
       },

@@ -1,13 +1,15 @@
 <template>
-    <sign-in-form />
+    <sign-in-form @updateMenu="$emit('updateMenu')" />
 </template>
 
 <script>
-import SignInForm from "../layouts/SignInForm";
+import SignInForm from "../components/SignInForm";
 import router from "@/router";
 export default {
   name: "SignIn",
-  components: { SignInForm}
+  components: { SignInForm},
+  methods: {
+  }
 }
 </script>
 

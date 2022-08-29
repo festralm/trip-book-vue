@@ -29,7 +29,7 @@
         <button v-else @click="undoAdmin">Сделать администратором</button>
       </p>
     </div>
-    <!--TODO задать права-->
+    <!--TODO not admin error page-->
   </div>
 </template>
 

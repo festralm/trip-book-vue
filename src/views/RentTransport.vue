@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import RentTransportLayout from "@/layouts/RentTransportLayout";
+import RentTransportLayout from "@/layouts/create_transport/CreateTransportLayout";
 export default {
   name: "RentTransport",
   components: {RentTransportLayout},

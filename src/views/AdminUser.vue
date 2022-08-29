@@ -4,7 +4,7 @@
 </template>
 
 <script>
-import UserForAdmin from "@/layouts/UserForAdmin";
+import UserForAdmin from "@/components/UserForAdmin";
 import router from "@/router";
 export default {
   name: "AdminUser",

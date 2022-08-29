@@ -7,18 +7,18 @@ import {BootstrapVue, IconsPlugin} from "bootstrap-vue";
 import VueRouter from "vue-router";
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-import VuetifyImageInput from 'vuetify-image-input';
-import VImageInput from 'vuetify-image-input';
 
 Vue.use(VueRouter)
 Vue.use(PortalVue)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(Vuex)
-Vue.component(VImageInput.name, VImageInput);
 
 const store = new Vuex.Store({
   state: {
+    menuShow: false,
+    menuDriver: false,
+    menuNotDriver: false,
     token: localStorage.getItem('token'),
     authorised: localStorage.getItem('authorised'),
     user: localStorage.getItem('user'),
@@ -26,11 +26,18 @@ const store = new Vuex.Store({
     transportForm: {
       'type': 1,
       'withDriver': true,
-      'brand': '',
-      'model': '',
+      'brand': 0,
+      'model': 0,
       'forHour': null,
-      'name': ''
-    }
+      'name': '',
+      'description': '',
+      'start': null,
+      'finish': null,
+      'photos': [],
+    },
+    cars: [],
+    addresses: [],
+    car: []
   }
 })
 
