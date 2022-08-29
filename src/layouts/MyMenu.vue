@@ -60,9 +60,13 @@ export default {
     },
   },
   methods: {
-    updateMenu() {
+    updateMenu(authorised) {
       this.$store.state.menuShow = false;
-      this.$store.state.authorised = null;
+      if (authorised) {
+        this.$store.state.authorised = 'true';
+      } else {
+        this.$store.state.authorised = null;
+      }
       this.$forceUpdate();
     },
     openMenu() {

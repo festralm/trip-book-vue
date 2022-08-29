@@ -199,13 +199,13 @@ export default {
       if (response.status === 200) {
         response.text().then(data => {
           this.car = JSON.parse(data);
+          this.editBooks()
         })
-        await this.editBooks()
       } else {
         await router.push("/error/default")
       }
     },
-    editBooks() {
+    async editBooks() {
       this.car['start'] = (new Date() > new Date(this.car['start']) ? new Date() :  new Date(this.car['start'])) - 1000 * 60 * 60 * 24
       this.car['finish'] = new Date(this.car['finish']).getTime() + 1000 * 60 * 60 * 24
       this.car.books = this.car.books.map((x) => {
@@ -309,6 +309,7 @@ export default {
     if (response.status === 200) {
       response.text().then(data => {
         this.car = JSON.parse(data);
+        this.editBooks();
       })
     } else {
       await router.push("/error/default")

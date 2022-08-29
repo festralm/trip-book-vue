@@ -61,16 +61,13 @@ export default {
             body: JSON.stringify(this.form),
           },
       );
-      if (this.$store.state.token !== '') {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
       const response = await fetch(request);
       if (response.status === 200) {
         response.json().then(data => {
             localStorage.setItem('token', response.headers.get("Authorization"));
             localStorage.setItem('authorised', 'true');
             router.push("/");
-            this.$emit('updateMenu');
+            this.$emit('updateMenu', true);
         })
       } else if (response.status === 403) {
         this.error = 'Неверный логин или пароль';

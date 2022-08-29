@@ -3,7 +3,7 @@
     <b-container class=" mt-3">
       <b-row class=" justify-content-center auth-layout">
         <b-col lg="4">
-          <router-view  @updateMenu="$emit('updateMenu')" />
+          <router-view  @updateMenu="$emit('updateMenu($event,userDefined)')" />
         </b-col>
       </b-row>
     </b-container>

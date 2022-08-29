@@ -70,9 +70,6 @@ export default {
             body: JSON.stringify(this.form),
           },
       );
-      if (this.$store.state.token !== '') {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
       const response = await fetch(request);
       if (response.status === 200) {
         response.json().then(data => {
