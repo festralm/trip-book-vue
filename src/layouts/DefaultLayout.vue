@@ -2,6 +2,7 @@
   <div class="default">
     <my-menu></my-menu>
     <router-view @updateMenu="updateMenu()"/>
+    <MyFooter></MyFooter>
   </div>
 </template>
 
@@ -9,9 +10,10 @@
 
 import MyMenu from "@/layouts/MyMenu";
 import router from "@/router";
+import MyFooter from "./MyFooter";
 export default {
   name: "DefaultLayout",
-  components: {MyMenu},
+  components: {MyFooter, MyMenu},
   data() {
     return {
     }
@@ -38,30 +40,19 @@ export default {
     var response = await fetch(request);
     if (response.status === 200) {
       response.json().then(data => {
-        const statusNumber = data['statusNumber'];
-        if (statusNumber !== 7) {
-          localStorage.removeItem('token');
-          localStorage.removeItem('authorised');
-          localStorage.removeItem('isAdmin');
-
-          if (statusNumber === 2) {
-            router.push("/error/banned");
-          } else if (statusNumber === 3) {
-            router.push("/error/deleted");
-          } else if (statusNumber === 4) {
-            router.push("/error/default");
-          }
-        } else {
           localStorage.setItem('token', this.$store.state.token);
           localStorage.setItem('authorised', 'true');
-          localStorage.setItem('isAdmin', String(data['body']['role'] === 'ADMIN'));
-        }
+          console.log(data)
+          localStorage.setItem('isAdmin', String(data['role'] === 'ADMIN'));
+        console.log(this.$store.state.isAdmin)
       })
     } else {
       localStorage.removeItem('token');
       localStorage.removeItem('authorised');
       localStorage.removeItem('isAdmin');
-      router.push("/error/default")
+      if (response.status !== 203) {
+        router.push("/error/default")
+      }
     }
     this.$forceUpdate();
   }

@@ -1,6 +1,5 @@
 <template>
   <div class="rent" id="rent">
-<!--    todo legend-->
     <div v-if="$store.state.transportForm['type'] === 1" class="left">
       <div class="text">
         <p class="name">Автомобиль какой марки вы желаете сдать в аренду?</p>
@@ -12,7 +11,7 @@
                     v-model="$store.state.transportForm['brand']"
                     :options="options"></b-select>
       </div>
-      <div class="footer">
+      <div class="my-footer">
         <div class="footer-content m-4">
           <b-button class="back" @click="$emit('back')" variant="outline-secondary">Назад</b-button>
           <b-button class="next" @click="$emit('next') " v-bind:disabled="$store.state.transportForm['brand'] === 0"
@@ -24,6 +23,8 @@
 </template>
 
 <script>
+import router from "../../router";
+
 export default {
   name: "Brand3",
   data() {
@@ -44,20 +45,24 @@ export default {
       request.headers.append("Authorization", this.$store.state.token);
     }
     var response = await fetch(request);
-    response.json().then(data => {
-      this.options = data.reduce((opts, brand) => {
-        opts.push({
-          "value": brand['id'],
-          "text": brand['name']
+    if (response.status === 200) {
+      response.json().then(data => {
+        this.options = data.reduce((opts, brand) => {
+          opts.push({
+            "value": brand['id'],
+            "text": brand['name']
+          })
+          return opts;
+        }, []);
+        this.options.push({
+          "value": 0,
+          "text": 'Выберите марку'
         })
-        return opts;
-      }, []);
-      this.options.push({
-        "value": 0,
-        "text": 'Выберите марку'
+        this.$forceUpdate()
       })
-      this.$forceUpdate()
-    })
+    } else {
+      await router.push("/error/default")
+    }
   }
 }
 </script>
@@ -97,7 +102,7 @@ export default {
   float: right;
 }
 
-.footer {
+.my-footer {
   width: 100%;
 }
 

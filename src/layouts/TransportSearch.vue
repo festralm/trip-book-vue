@@ -4,7 +4,7 @@
       <b-form @submit.prevent="" class="search-container">
         <div>
           <p class="p-0 m-0 ps-2">Местоположение</p>
-          <b-form-input v-model="form.address" autocomplete="off" @click="showOptions()"
+          <b-form-input v-model="form.address" autocomplete="off"
                         class="p-2 my-input left" placeholder="Где будем искать?"></b-form-input>
         </div>
         <div>
@@ -24,7 +24,8 @@
     </div>
     <div class="advices">
       <p class="p-0 m-0">Читайте наши советы и советы наших пользователей</p>
-      <b-button variant="light">Читать</b-button>
+      <a href="/"><b-button variant="light">Читать</b-button></a>
+<!--      todo advices-->
     </div>
   </div>
 </template>
@@ -64,22 +65,23 @@ export default {
       })
     },
 
-    async showOptions() {
-      const request = new Request(
-          "http://localhost/transports/addresses",
-          {
-            method: "GET",
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
-
-      response.text().then(data =>{
-        this.$store.state.addresses = JSON.parse(data);
-      })
-    }
+    // async showOptions() {
+    //   const request = new Request(
+    //       "http://localhost/transports/addresses",
+    //       {
+    //         method: "GET",
+    //       }
+    //   );
+    //   if (this.$store.state.token !== null) {
+    //     request.headers.append("Authorization", this.$store.state.token);
+    //   }
+    //   var response = await fetch(request);
+    //
+    //
+    //   response.text().then(data =>{
+    //     this.$store.state.addresses = JSON.parse(data);
+    //   })
+    // }
   },
 }
 </script>

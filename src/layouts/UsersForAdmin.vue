@@ -1,20 +1,21 @@
 <template>
-  <div class="users-for-admin m-5 p-5 ">
+  <div class="users-for-admin mt-5 pt-5 mb-3">
     <div class="sort-container pb-5">
       <div ><b-select @change="sort()" class="px-3 my-select" v-model="sortType" :options="sortOptions"></b-select></div>
       <div ><b-select @change="sort()" class="px-3 my-select" v-model="sortObject" :options="objectOptions"></b-select></div>
     </div>
     <div class="users-container">
       <div class="user pt-3 " v-for="(user, key) in $store.state.users" v-bind:user="user" :key="key">
-        <img @click="goToUsersPage(user.id)" class="image pb-2" width="200px" :src="require(`../assets/${user.photoUrl}`)"/>
-        <div @click="goToUsersPage(user.id)" class="text-container text-center">
-          <p class="mb-1">ID: {{user.id}}</p>
-          <p >{{user.email}}</p>
+        <a v-bind:href="`/admin/users/${user.id}`">
+        <img class="image pb-2" width="200px" :src="require(`../assets/${user.photoUrl}`)"/>
+        </a>
+        <div class="text-container text-center">
+          <a v-bind:href="`/admin/users/${user.id}`" class="px-1 mb-1">ID: {{user.id}}</a>
+          <a v-bind:href="`/admin/users/${user.id}`" class="px-1">{{user.email}}</a>
         </div>
       </div>
     </div>
   </div>
-  <!--  todo empty users list-->
 </template>
 
 <script>
@@ -67,9 +68,6 @@ export default {
       console.log(this.$store.state.users)
       this.$forceUpdate();
     },
-    goToUsersPage(id) {
-      router.push({path: `/admin/users/${id}`})
-    }
   },
   async beforeMount() {
     const request = new Request(
@@ -90,8 +88,9 @@ export default {
       response.json().then(data => {
         this.$store.state.users = data;
       })
+    } else {
+      await router.push("/error/default")
     }
-    //todo errors
   }
 }
 </script>
@@ -130,6 +129,7 @@ export default {
 
 .image {
   cursor: pointer;
+  border-radius: 20px;
 }
 
 .text-container {
@@ -138,6 +138,17 @@ export default {
   font-weight: bold;
   cursor: pointer;
   width: 200px;
+}
+.text-container a:hover {
+  color: #b8a7a7;
+}
+.text-container a {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+text-decoration: none;
+  color: black;
 }
 </style>
 

@@ -28,7 +28,6 @@
               ></g>
           </svg>
         </div>
-<!--        todo-->
         <a>Продолжить с Google</a>
       </b-button>
     </b-form>
@@ -37,7 +36,7 @@
 
 <script>
 
-import router from "@/router";
+import router from "../router";
 
 export default {
   name: "SignInForm",
@@ -60,21 +59,24 @@ export default {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(this.form),
-          }
+          },
       );
-      var response = await fetch(request);
-      response.json().then(data => {
-        if (response.status === 200) {
-          if (data['statusNumber'] === 5) {
-            this.error = data['message'];
-          } else {
+      if (this.$store.state.token !== '') {
+        request.headers.append("Authorization", this.$store.state.token);
+      }
+      const response = await fetch(request);
+      if (response.status === 200) {
+        response.json().then(data => {
             localStorage.setItem('token', response.headers.get("Authorization"));
             localStorage.setItem('authorised', 'true');
             router.push("/");
             this.$emit('updateMenu');
-          }
-        }
-      })
+        })
+      } else if (response.status === 403) {
+        this.error = 'Неверный логин или пароль';
+      } else {
+        await router.push("error/default");
+      }
     }
   }
 }

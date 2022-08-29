@@ -10,11 +10,11 @@
         <b-select class="form-select " v-model="$store.state.transportForm['model']"
                   :options="options"></b-select>
       </div>
-      <div class="footer">
+      <div class="my-footer">
         <div class="footer-content m-4">
           <b-button class="back" @click="$emit('back')" variant="outline-secondary">Назад</b-button>
           <b-button class="next" @click="$emit('next')" variant="secondary"
-          v-bind:disabled="$store.state.transportForm['model'] === 0">Продолжить</b-button>
+                    v-bind:disabled="$store.state.transportForm['model'] === 0">Продолжить</b-button>
         </div>
       </div>
     </div>
@@ -22,6 +22,8 @@
 </template>
 
 <script>
+import router from "../../router";
+
 export default {
   name: "Model4",
   props: [
@@ -35,16 +37,17 @@ export default {
   methods: {
   },
   async beforeMount() {
-      var request = new Request(
-          "http://localhost/car/" + this.$store.state.transportForm['brand'] + "/models",
-          {
-            method: "GET",
-          }
-      );
-      if (this.$store.state.token !== null) {
-        request.headers.append("Authorization", this.$store.state.token);
-      }
-      var response = await fetch(request);
+    var request = new Request(
+        "http://localhost/car/" + this.$store.state.transportForm['brand'] + "/models",
+        {
+          method: "GET",
+        }
+    );
+    if (this.$store.state.token !== null) {
+      request.headers.append("Authorization", this.$store.state.token);
+    }
+    var response = await fetch(request);
+    if (response.status === 200) {
       response.json().then(data => {
         this.options = data.reduce((opts, model) => {
           opts.push({
@@ -59,6 +62,9 @@ export default {
         })
         this.$forceUpdate()
       })
+    } else {
+      await router.push("/error/default")
+    }
   }
 }
 </script>
@@ -98,7 +104,7 @@ export default {
   float: right;
 }
 
-.footer {
+.my-footer {
   width: 100%;
 }
 

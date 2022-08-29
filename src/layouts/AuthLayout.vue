@@ -22,6 +22,7 @@ export default {
     if (this.$store.state.authorised === 'true') {
       router.push("/")
     }
+    this.$store.state.fixed = true
   }
 }
 </script>

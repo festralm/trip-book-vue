@@ -1,4 +1,4 @@
-<template>
+<template >
   <div class="menu-container" v-bind:class="{fixed: $store.state.fixed}">
     <div>
       <a href="/">
@@ -99,6 +99,7 @@ export default {
 }
 
 .menu-container {
+  font-family: 'Roboto Mono', monospace;
   display: flex;
   justify-content: space-around;
   align-items: center;

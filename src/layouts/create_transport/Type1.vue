@@ -51,7 +51,7 @@
           </div>
         </b-button>
       </div>
-      <div class="footer">
+      <div class="my-footer">
         <div class="footer-content m-4">
           <b-button class="back" @click="$emit('back')" variant="outline-secondary">Назад</b-button>
           <b-button class="next" @click="$emit('next')" variant="secondary">Продолжить</b-button>
@@ -149,7 +149,7 @@ export default {
   float: right;
 }
 
-.footer {
+.my-footer {
   width: 100%;
 }
 

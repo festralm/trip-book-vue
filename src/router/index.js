@@ -17,9 +17,11 @@ import Address5 from "@/layouts/create_transport/Address5";
 import Final from "@/layouts/create_transport/Final";
 import Car from "@/views/Car";
 import Error from "../views/Error";
-import Banned from "../layouts/errors/Banned";
-import Deleted from "../layouts/errors/Deleted";
-import Default from "../layouts/errors/Default";
+import Wishlist from "../layouts/Wishlist";
+import MyTransport from "../layouts/MyTransport";
+import Trips from "../layouts/Trips";
+import MyProfile from "../layouts/MyProfile";
+import UsersProfile from "../layouts/UsersProfile";
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -117,26 +119,34 @@ const routes = [
         ]
       },
       {
-        path: '/error',
+        path: '/error/default',
         name: 'Error',
         component: Error,
-        children: [
-          {
-            path: '/error/banned',
-            name: 'Banned',
-            component: Banned,
-          },
-          {
-            path: '/error/deleted',
-            name: 'Deleted',
-            component: Deleted,
-          },
-          {
-            path: '/error/default',
-            name: 'Default',
-            component: Default,
-          },
-        ]
+      },
+      {
+        path: '/wishlist',
+        name: 'Wishlist',
+        component: Wishlist,
+      },
+      {
+        path: '/trips',
+        name: 'Trips',
+        component: Trips,
+      },
+      {
+        path: '/my-transport',
+        name: 'MyTransport',
+        component: MyTransport,
+      },
+      {
+        path: '/profile',
+        name: 'MyProfile',
+        component: MyProfile,
+      },
+      {
+        path: '/users/:id',
+        name: 'UsersProfile',
+        component: UsersProfile,
       },
     ]
   },

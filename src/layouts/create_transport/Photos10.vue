@@ -2,17 +2,20 @@
   <div class="rent" id="rent">
     <div class="left">
       <div class="text">
-        <p class="name ">Загрузите фотографии вашего транспортного средства</p>
+        <p class="name ">Загрузите до 5 фотографий вашего транспортного средства</p>
       </div>
     </div>
     <div class="right">
       <div class="my-input">
-        <input class="image-input" @change="getFiles" type="file" name="photos" multiple="multiple" accept="image/png, image/jpeg">
+        <input class="image-input" @change="getFiles" type="file" name="photos" multiple="multiple"
+               accept="image/png, image/jpeg">
       </div>
-      <div class="footer">
+<!--      todo photos count error-->
+      <div class="my-footer">
         <div class="footer-content m-4">
           <b-button class="back" @click="$emit('back')" variant="outline-secondary">Назад</b-button>
-          <b-button class="next" @click="$emit('next')" variant="secondary">Продолжить</b-button>
+          <b-button class="next" @click="$emit('next')" variant="secondary"
+          v-bind:disabled="$store.state.transportForm['carPhotoUrls'].length >= 6">Продолжить</b-button>
         </div>
       </div>
     </div>
@@ -66,7 +69,7 @@ export default {
   float: right;
 }
 
-.footer {
+.my-footer {
   width: 100%;
 }
 .my-input {
