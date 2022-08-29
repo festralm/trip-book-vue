@@ -8,6 +8,7 @@
 <script>
 
 import MyMenu from "@/layouts/MyMenu";
+import router from "@/router";
 export default {
   name: "DefaultLayout",
   components: {MyMenu},
@@ -25,7 +26,6 @@ export default {
   },
   async beforeMount() {
     this.$store.state.menuShow = false;
-    localStorage.clear();
     var request = new Request(
         "http://localhost/",
         {
@@ -37,31 +37,31 @@ export default {
     }
     var response = await fetch(request);
     if (response.status === 200) {
-      console.log(response);
       response.json().then(data => {
         const statusNumber = data['statusNumber'];
-        if (statusNumber !== 4) {
+        if (statusNumber !== 7) {
           localStorage.removeItem('token');
-          localStorage.removeItem('user');
           localStorage.removeItem('authorised');
+          localStorage.removeItem('isAdmin');
 
-          if (statusNumber === 9) {
-            //TODO blocked
-          } else if (statusNumber === 7) {
-            //TODO deleted
-          } else if (statusNumber === 6) {
-            //TODO not found
+          if (statusNumber === 2) {
+            router.push("/error/banned");
+          } else if (statusNumber === 3) {
+            router.push("/error/deleted");
+          } else if (statusNumber === 4) {
+            router.push("/error/default");
           }
         } else {
           localStorage.setItem('token', this.$store.state.token);
-          localStorage.setItem('user', JSON.stringify(data['body']));
           localStorage.setItem('authorised', 'true');
+          localStorage.setItem('isAdmin', String(data['body']['role'] === 'ADMIN'));
         }
       })
     } else {
       localStorage.removeItem('token');
-      localStorage.removeItem('user');
       localStorage.removeItem('authorised');
+      localStorage.removeItem('isAdmin');
+      router.push("/error/default")
     }
     this.$forceUpdate();
   }

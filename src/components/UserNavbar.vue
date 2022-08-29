@@ -8,9 +8,7 @@
     <hr>
     <a href="/rent-transport#rent">Сдать транспорт в аренду</a>
     <a href="/profile">Мой профиль</a>
-    <div v-if="JSON.parse($store.state.user)['role'] === 'ADMIN'">
-      <a @click="getAdminPage()">Страница администратора</a>
-    </div>
+    <a v-if="$store.state.isAdmin === 'true'" @click="getAdminPage()">Страница администратора</a>
     <hr>
     <a href="/help">Помощь</a>
     <a @click="logout()" href="#">Выйти</a>
@@ -35,7 +33,7 @@ export default {
             method: "POST",
           }
       );
-      if (this.$store.state.token !== '') {
+      if (this.$store.state.token !== null) {
         request.headers.append("Authorization", this.$store.state.token);
       }
       var response = await fetch(request);
@@ -43,8 +41,9 @@ export default {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('authorised');
-        await router.push("/sign-in");
         this.$emit('updateMenu')
+      } else {
+        router.push("/error/default")
       }
     },
     async getAdminPage() {

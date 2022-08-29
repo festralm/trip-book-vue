@@ -29,7 +29,7 @@ export default {
 <style scoped>
 
 .rent {
-  height: 722px;
+  height: 723px;
 
   font-family: 'Roboto Mono', monospace;
 }
@@ -38,16 +38,16 @@ export default {
   width: 50%;
   background: rgb(255,125,117);
   background: linear-gradient(15deg, rgba(255,125,117,1) 0%, rgba(254,134,255,1) 35%, rgba(255,250,143,1) 100%);
-  height: 722px;
+  height: 723px;
 }
 .right {
   float: right;
   width: 50%;
-  height: 722px;
+  height: 723px;
 }
 .text {
   width: 70%;
-  margin: 270px auto auto;
+  margin: 100px auto auto;
 
 }
 .name {

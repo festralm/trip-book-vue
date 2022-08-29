@@ -1,35 +1,33 @@
 <template>
   <div class="image py-5">
-    <div class="search p-5 mx-5 pt-5">
-      <b-form @submit.prevent="search()">
-        <b-row class="px-3">
-          <b-col class="col-1 pt-2">
-            <b-form-input v-model="form.id" placeholder="ID"></b-form-input>
-          </b-col>
-          <b-col class="col-2 pt-2">
-            <b-form-input v-model="form.phoneNumber" placeholder="Номер телефона"></b-form-input>
-          </b-col>
-          <b-col class="col-2 pt-2">
-            <b-form-input v-model="form.email" placeholder="Email"></b-form-input>
-          </b-col>
-          <b-col class="col-2 pt-2">
-            <b-form-select class="form-select" v-model="form.role" :options="form.options"></b-form-select>
-          </b-col>
-          <b-col class="col-2 pt-2">
-            <b-button class="button w-50" variant="outline-primary" type="submit">Искать</b-button>
-          </b-col>
-        </b-row>
+    <div class="search-wrapper">
+      <b-form class="px-4 search-container">
+        <div>
+          <b-form-input v-model="form.id" class="my-input left id" placeholder="ID"></b-form-input>
+        </div>
+        <div>
+          <b-form-input v-model="form.email" class="my-input email" placeholder="Email"></b-form-input>
+        </div>
+        <div>
+          <b-form-select class="form-select my-select my-input" v-model="form.isBlocked" :options="isBlocked"></b-form-select>
+        </div>
+        <div>
+          <b-form-select class="form-select my-select my-input" v-model="form.isDeleted" :options="isDeleted"></b-form-select>
+        </div>
+        <div>
+          <b-form-select class="form-select my-select my-input" v-model="form.role" :options="roles"></b-form-select>
+        </div>
+        <div>
+          <div class="button-wrapper mt-1 ms-4">
+            <img @click="search()" class=" search-button" src="../assets/search.svg" />
+          </div>
+        </div>
       </b-form>
-      <div class="mt-5">
-        <div class="main-text">
-          <p class="m-0 pt-5">Поиск</p>
-          <p class="mt-0 pt-2">пользователей</p>
-        </div>
-        <div class="pt-4">
-          <b-button variant="outline-secondary">Искать по объявлениям</b-button>
-          <!--          todo transports search-->
-        </div>
-      </div>
+    </div>
+    <div class="ads">
+      <p class="p-0 m-0">Поиск по объявлениям</p>
+      <b-button variant="light">Искать</b-button>
+      <!--          todo transports search-->
     </div>
   </div>
 </template>
@@ -43,24 +41,30 @@ export default {
     return {
       form: {
         id: '',
-        phoneNumber: '',
         email: null,
-        deleted: '',
-        blocked: '',
+        isDeleted: null,
+        isBlocked: null,
         role: null,
-        options: [
-          { value: null, text: "Выбрать"},
-          { value: 'USER', text: "Пользователь"},
-          { value: 'ADMIN', text: "Администратор"},
-        ]
-      }
+      },
+      roles: [
+        { value: null, text: "Выбрать роль"},
+        { value: 'USER', text: "Пользователь"},
+        { value: 'ADMIN', text: "Администратор"},
+      ],
+      isBlocked: [
+        { value: null, text: "Заблокирован?"},
+        { value: true, text: "Да"},
+        { value: false, text: "Нет"},
+      ],
+      isDeleted: [
+        { value: null, text: "Удален?"},
+        { value: true, text: "Да"},
+        { value: false, text: "Нет"},
+      ],
     }
   },
   methods: {
     async search() {
-      if (this.form.email == '') {
-        this.form.email = null
-      }
       const request = new Request(
           "http://localhost/admin/search",
           {
@@ -71,16 +75,17 @@ export default {
             body: JSON.stringify(this.form),
           }
       );
-      console.log(this.form)
       if (this.$store.state.token !== null) {
         request.headers.append("Authorization", this.$store.state.token);
       }
       var response = await fetch(request);
 
-      response.text().then(data =>{
-        this.$store.state.users = JSON.parse(data);
-      })
-      console.log(this.$store.state.users)
+      if (response.status === 200) {
+        response.text().then(data => {
+          this.$store.state.users = JSON.parse(data);
+        })
+      }
+      //todo errors
     }
   }
 
@@ -88,28 +93,89 @@ export default {
 </script>
 
 <style scoped>
-
-.main-text {
-  font-size: 40px;
-  font-weight: 600;
+.my-select {
+  cursor: pointer;
+}
+.search-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
 }
 
-.search {
-  background: rgba(233, 214, 214, 0.7);
+.search-wrapper {
+  font-family: 'Roboto Mono', monospace;
+  margin: auto;
+  width: 59%;
+  background-color: white;
+  height: 58px;
+  border-radius: 50px;
+  font-weight: 550;
+}
+
+.button-wrapper {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  border: #cbbcbc solid 1px;
   border-radius: 50px;
 }
-
-.search span {
-  font-size: 17px;
+.button-wrapper:hover {
+  border: 2px solid #b8a7a7;
+  background-color: #eedcdc;
 }
+
+.search-button {
+  width: 50%;
+  margin-left: 13px;
+  margin-top: 12px;
+}
+.my-input::placeholder {
+  font-size: 15px;
+}
+
+.my-input {
+  border-top: none;
+  border-bottom: none;
+  border-right: none;
+  border-radius: 0;
+  border-left: 1px solid #e0e0e0;
+  margin-top: 11px;
+}
+input[type=text] {
+  font-size: 15px;
+}
+
+.left  {
+  border-left: none;
+}
+
 .image {
+  margin-top: 70px;
   top: 0;
   left: 0;
   width: 100%;
   background: url("../assets/background.jpg") no-repeat;
   background-size: cover;
   z-index: -1;
-  height: 700px;
+  height: 651px;
 }
 
+.ads {
+  margin-left: 180px;
+  margin-top: 300px;
+  font-family: 'Roboto Mono', monospace;
+  color: white;
+
+  font-size: 30px;
+  font-weight: bold;
+  width: 400px;
+}
+
+.id {
+  width: 60px;
+}
+
+.email {
+  width: 250px;
+}
 </style>

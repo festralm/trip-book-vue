@@ -16,6 +16,10 @@ import Model4 from "@/layouts/create_transport/Model4";
 import Address5 from "@/layouts/create_transport/Address5";
 import Final from "@/layouts/create_transport/Final";
 import Car from "@/views/Car";
+import Error from "../views/Error";
+import Banned from "../layouts/errors/Banned";
+import Deleted from "../layouts/errors/Deleted";
+import Default from "../layouts/errors/Default";
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -109,6 +113,28 @@ const routes = [
             path: '/rent-transport',
             name: 'RentTransportSix',
             component: Final,
+          },
+        ]
+      },
+      {
+        path: '/error',
+        name: 'Error',
+        component: Error,
+        children: [
+          {
+            path: '/error/banned',
+            name: 'Banned',
+            component: Banned,
+          },
+          {
+            path: '/error/deleted',
+            name: 'Deleted',
+            component: Deleted,
+          },
+          {
+            path: '/error/default',
+            name: 'Default',
+            component: Default,
           },
         ]
       },

@@ -7,15 +7,13 @@
         <p class="description">Арендодатели Tripbook - это маленькое сообщество любителей транспорта,
           которые не прочь поделиться своей радостью с арендаторами.</p>
         <br>
-        <p class="description">Все объвления на Tripbook рассматриваются нашей маленькой командой. Если ваша идея будет соответствовать нашим стандартам,
-          вы сможете добавить дату и начать сдавать транспорт в аренду!</p>
+        <p class="description">Создайте ваше объявление, чтобы начать сдавать транспорт уже сейчас!</p>
         <br>
         <b-button @click="$emit('next')" variant="outline-secondary">Продолжить</b-button>
       </div>
     </div>
     <div class="right">
       <div class="first-col mt-5 ">
-<!--        todo alt-->
         <img class="car1 ms-3" src="../../assets/car1.jpg"/>
         <img class="car2 mt-5" src="../../assets/car2.jpg"/>
       </div>
@@ -28,14 +26,13 @@
 
 <script>
 export default {
-  // todo if user is not authenticated
   name: "ZeroStep0",
 }
 </script>
 
 <style scoped>
 .rent {
-  height: 722px;
+  height: 723px;
 }
 .left {
   float: left;
@@ -47,8 +44,9 @@ export default {
 }
 .text {
   font-family: 'Roboto Mono', monospace;
-  width: 60%;
-  margin: 100px auto auto;
+  font-size: 20px;
+  width: 75%;
+  margin: 10px auto auto auto;
 }
 
 .name {

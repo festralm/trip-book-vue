@@ -1,26 +1,22 @@
 <template>
   <div class="text-wrapper text-center">
     <div class="text">
-      <p class="main">Поздравляем!</p>
-      <br>
-      <p>Ваше объявление будет опубликовано в скором времени. Ожидайте уведомления.</p>
+      <router-view></router-view>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "Final"
+  name: "Error"
 }
 </script>
 
-<style scoped>
+<style>
 .text-wrapper {
-
   background: rgb(255,125,117);
   background: linear-gradient(15deg, rgba(255,125,117,1) 0%, rgba(254,134,255,1) 35%, rgba(255,250,143,1) 100%);
-  height: 722px;
-
+  height: 721px;
 }
 .text {
   width: 70%;

@@ -3,17 +3,14 @@
     <h3 class="text-center pb-3 pt-2">Регистрация</h3>
     <b-form id="form" @submit.prevent="signUp" action="" method="post">
       <div v-if="errors" >
-<!--        todo all errors!-->
-<!--        todo email error-->
-<!--        todo empty error-->
-        <p class="errors text-center py-1" v-for="(error, key) in errors" :key="key">
+        <p class="errors text-center my-0 pb-2" v-for="(error, key) in errors" :key="key">
           {{ error }}
         </p>
       </div>
       <b-form-input class="my-2" required type="email" v-model="form.email" name="username" placeholder="Email"></b-form-input>
-      <b-form-input class="my-2" @blur.native="checkPasswords()" required minlength="8" type="password"
+      <b-form-input class="my-2" @change="checkPasswords()" required minlength="8" type="password"
                     v-model="form.password" name="password" placeholder="Пароль"></b-form-input>
-      <b-form-input class="my-2" @blur.native="checkPasswords()" required minlength="8" type="password"
+      <b-form-input class="my-2" @change="checkPasswords()" required minlength="8" type="password"
                     v-model="form.passwordRepeat" name="password-repeat" placeholder="Повторите пароль"></b-form-input>
       <b-button :disabled="isDisabled" class="button my-2 w-100" variant="primary" type="submit">Зарегистрироваться</b-button>
       <p class=" text-center m-0 p-1"><router-link to="/sign-in" class="link">Уже зарегистрированы?</router-link></p>
@@ -53,7 +50,6 @@ export default {
     return {
       form: {
         email: '',
-        phoneNumber: '',
         password: "",
         passwordRepeat: ""
       },
@@ -77,11 +73,11 @@ export default {
 
       response.json().then(data => {
         if (response.status === 200) {
-          if (data['statusNumber'] === 2) {
+          if (data['statusNumber'] === 6) {
             this.errors.add(data['message']);
+            this.$forceUpdate()
           } else {
             localStorage.setItem('token', response.headers.get("Authorization"));
-            localStorage.setItem('user', JSON.stringify(data));
             localStorage.setItem('authorised', 'true');
             this.$emit("updateMenu()");
             router.push("/")

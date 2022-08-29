@@ -1,6 +1,4 @@
 <template>
-
-
   <div class="rent" id="rent">
     <div class="left">
       <div class="text">
@@ -26,8 +24,8 @@ export default {
   name: "Photos10",
   methods: {
     getFiles(event) {
-      console.log(event.target.files)
-      this.$store.state.transportForm['photos'] = Object.entries(event.target.files).map((x, y) => x[1].name);
+      this.$store.state.transportForm['carPhotoUrls'] =
+          Object.entries(event.target.files).map((x, y) => x[1].name);
     }
   }
 }
@@ -36,7 +34,7 @@ export default {
 <style scoped>
 
 .rent {
-  height: 722px;
+  height: 723px;
 
   font-family: 'Roboto Mono', monospace;
 }
@@ -45,16 +43,16 @@ export default {
   width: 50%;
   background: rgb(255,125,117);
   background: linear-gradient(15deg, rgba(255,125,117,1) 0%, rgba(254,134,255,1) 35%, rgba(255,250,143,1) 100%);
-  height: 722px;
+  height: 723px;
 }
 .right {
   float: right;
   width: 50%;
-  height: 722px;
+  height: 723px;
 }
 .text {
   width: 70%;
-  margin: 290px auto auto;
+  margin: 80px auto auto;
 
 }
 .name {

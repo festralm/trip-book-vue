@@ -11,10 +11,17 @@
 </template>
 
 <script>
+import router from "../router";
+
 export default {
   name: "AuthLayout",
   methods: {
 
+  },
+  beforeMount() {
+    if (this.$store.state.authorised === 'true') {
+      router.push("/")
+    }
   }
 }
 </script>
@@ -36,13 +43,14 @@ export default {
   width: 20px;
   float: left;
 }
+
 .my-image {
   top: 0;
   left: 0;
   width: 100%;
   background: url("../assets/background.jpg") no-repeat;
   background-size: cover;
-  z-index: -1;
-  height: 700px;
+  margin-top: 70px;
+  height: 651px;
 }
 </style>
