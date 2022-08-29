@@ -12,7 +12,7 @@
       <a class="my-dropdown-item py-2" href="/my-transport">Мой транспорт</a>
       <a class="my-dropdown-item py-2" href="/wishlist">Список желаний</a>
       <hr>
-      <a class="my-dropdown-item py-2" href="/rent-transport">Сдать транспорт в аренду</a>
+      <a class="my-dropdown-item py-2" @click="routeToRentTransport()">Сдать транспорт в аренду</a>
       <a class="my-dropdown-item py-2" href="/profile">Мой профиль</a>
       <div v-if="JSON.parse($store.state.user)['role'] === 'ADMIN'">
         <a class="my-dropdown-item py-2" @click="getAdminPage()">Страница администратора</a>
@@ -64,6 +64,9 @@ export default {
     },
     async getAdminPage() {
       await router.push("/admin");
+    },
+    async routeToRentTransport() {
+      await router.push("/rent-transport#rent")
     }
   },
   beforeDestroy() {
