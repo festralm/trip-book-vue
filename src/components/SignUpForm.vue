@@ -75,8 +75,8 @@ export default {
         response.json().then(data => {
             localStorage.setItem('token', response.headers.get("Authorization"));
             localStorage.setItem('authorised', 'true');
-            this.$emit("updateMenu()");
-            router.push("/")
+            router.push("/");
+          this.$emit("updateMenu");
         })
       } else if (response.status === 403) {
         console.log(response)

@@ -8,7 +8,8 @@
     <div class="right">
       <div class="my-input ">
         <b-form-textarea  class="description-input my-4 py-2" v-model="$store.state.transportForm['description']"
-                     placeholder="Введите текст" v-bind:value="$store.state.transportForm['description']"></b-form-textarea>
+                     placeholder="Введите текст" v-bind:value="$store.state.transportForm['description']">
+        </b-form-textarea>
       </div>
 <!--      todo length error-->
       <div class="my-footer">

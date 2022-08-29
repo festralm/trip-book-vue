@@ -19,15 +19,9 @@ export default {
     }
   },
   methods: {
-    updateMenu(event, authorized) {
-      console.log(authorized)
-      console.log(event)
-      if (authorized) {
-        this.$store.state.authorised = 'true';
-      } else {
-        this.$store.state.authorised = null;
-      }
+    updateMenu() {
       this.$store.state.menuShow = false;
+      this.$store.state.authorised = localStorage.getItem("authorised");
       this.$forceUpdate()
     }
   },
@@ -48,17 +42,17 @@ export default {
           localStorage.setItem('token', this.$store.state.token);
           localStorage.setItem('authorised', 'true');
           localStorage.setItem('isAdmin', String(data['role'] === 'ADMIN'));
+        this.$forceUpdate();
       })
     } else {
       localStorage.removeItem('token');
       localStorage.removeItem('authorised');
       localStorage.removeItem('isAdmin');
-      this.updateMenu(false)
+      this.$forceUpdate();
       if (response.status !== 203) {
         router.push("/error/default")
       }
     }
-    this.$forceUpdate();
   }
 }
 </script>

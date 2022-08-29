@@ -7,15 +7,7 @@
           <img class="photo text-center" :src="require(`../assets/${user.photoUrl}`)"/>
         </div>
         <div class="info mx-4 text-left">
-          <div class="rating-container">
-            <div class="image">
-              <a href="#reviews"><img src="../assets/rating.png"></a>
-            </div>
-            <div class="top ">
-              <a href="#reviews" class="ps-2 fw-bold button">Количество отзывов</a>
-            </div>
-          </div>
-          <p class="fw-bold mt-3 ">Email: {{user.email}}</p>
+          <p class="fw-bold mt-2 ">Email: {{user.email}}</p>
           <b-button class="my-button" @click="undoAdmin(user.id)" v-if="user.role === 'ADMIN'"
                     variant="outline-danger" >Сделать пользователем</b-button>
           <b-button class="my-button" @click="makeAdmin(user.id)" v-else
@@ -53,22 +45,13 @@
                 <a v-bind:href="`/transports/cars/${car.id}`"><img src="../assets/rating.png"></a>
               </div>
               <div class="top ">
-                <a v-bind:href="`/transports/cars/${car.id}`" class="ps-2  button">{{car.rating}} (Количество отзывов)</a>
+                <a v-bind:href="`/transports/cars/${car.id}`" class="ps-2  button">{{car.rating}} ({{car.reviews.length}} отзывов)</a>
               </div>
             </div>
             <a v-bind:href="`/transports/cars/${car.id}`">{{car.name}}</a>
             <br>
             <a v-bind:href="`/transports/cars/${car.id}`">{{car.brand}} {{car.model}}</a>
           </div>
-        </div>
-      </div>
-      <div id="reviews" class="rating-container mt-5">
-        <div class="image">
-          <!--        todo rating-->
-          <p><img src="../assets/rating.png"></p>
-        </div>
-        <div class="top ">
-          <p class="ps-2 fw-bold">Количество отзывов</p>
         </div>
       </div>
     </div>

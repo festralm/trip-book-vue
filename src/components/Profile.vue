@@ -6,15 +6,7 @@
           <img class="photo text-center" :src="require(`../assets/${user.photoUrl}`)"/>
         </div>
         <div class="info mx-4 text-left">
-          <div class="rating-container">
-            <div class="image">
-              <a href="#reviews"><img src="../assets/rating.png"></a>
-            </div>
-            <div class="top ">
-              <a href="#reviews" class="ps-2 fw-bold button">Количество отзывов</a>
-            </div>
-          </div>
-          <p class="fw-bold mt-3 ">Email: {{user.email}}</p>
+          <p class="fw-bold mt-2 ">Email: {{user.email}}</p>
         </div>
       </div>
     </div>
@@ -38,22 +30,14 @@
                 <a v-bind:href="`/transports/cars/${car.id}`"><img src="../assets/rating.png"></a>
               </div>
               <div class="top ">
-                <a v-bind:href="`/transports/cars/${car.id}`" class="ps-2  button">{{car.rating}} (Количество отзывов)</a>
+                <a v-bind:href="`/transports/cars/${car.id}`"
+                   class="ps-2  button">{{car.rating}} ({{car.reviews.length}} отзывов)</a>
               </div>
             </div>
             <a v-bind:href="`/transports/cars/${car.id}`">{{car.name}}</a>
             <br>
             <a v-bind:href="`/transports/cars/${car.id}`">{{car.brand}} {{car.model}}</a>
           </div>
-        </div>
-      </div>
-      <div id="reviews" class="rating-container mt-5">
-        <div class="image">
-          <!--        todo rating-->
-          <p><img src="../assets/rating.png"></p>
-        </div>
-        <div class="top ">
-          <p class="ps-2 fw-bold">Количество отзывов</p>
         </div>
       </div>
     </div>
@@ -102,6 +86,7 @@ export default {
   },
   async beforeMount() {
     await this.getUser();
+    this.user.cars.sort((x, y) => y.rating - x.rating)
   }
 }
 </script>

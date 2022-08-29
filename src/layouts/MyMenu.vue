@@ -13,13 +13,13 @@
     </div>
     <div>
       <div class="profile-button" @click="openMenu()">
-          <img class="p-1" width="45" src="https://img.icons8.com/pastel-glyph/64/000000/gender-neutral-user.png"/>
+        <img class="p-1" width="45" src="https://img.icons8.com/pastel-glyph/64/000000/gender-neutral-user.png"/>
       </div>
       <div v-show="$store.state.menuShow" v-if="$store.state.authorised" >
         <UserNavbar @updateMenu="updateMenu()"></UserNavbar>
       </div>
       <div v-show="$store.state.menuShow" v-else>
-        <AnonymousNavbar></AnonymousNavbar>
+        <AnonymousNavbar ></AnonymousNavbar>
       </div>
     </div>
   </div>
@@ -60,13 +60,9 @@ export default {
     },
   },
   methods: {
-    updateMenu(authorised) {
+    updateMenu() {
       this.$store.state.menuShow = false;
-      if (authorised) {
-        this.$store.state.authorised = 'true';
-      } else {
-        this.$store.state.authorised = null;
-      }
+      this.$store.state.authorised = localStorage.getItem("authorised");
       this.$forceUpdate();
     },
     openMenu() {

@@ -41,7 +41,7 @@ export default {
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         localStorage.removeItem('authorised');
-        this.$emit('updateMenu', false)
+        this.$emit('updateMenu')
         router.push("/sign-in")
       } else {
         router.push("/error/default")
