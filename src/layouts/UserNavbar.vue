@@ -14,7 +14,9 @@
       <hr>
       <a class="my-dropdown-item py-2" href="/rent-transport">Сдать транспорт в аренду</a>
       <a class="my-dropdown-item py-2" href="/profile">Мой профиль</a>
-      <a class="my-dropdown-item py-2" href="/admin">Страница администратора</a>
+      <div v-if="JSON.parse($store.state.user)['role'] === 'ADMIN'">
+        <a class="my-dropdown-item py-2" @click="getAdminPage()">Страница администратора</a>
+      </div>
       <hr>
       <a class="my-dropdown-item py-2" href="/help">Помощь</a>
       <a class="my-dropdown-item py-2" @click="logout()">Выйти</a>
@@ -40,12 +42,18 @@ export default {
             method: "POST",
           }
       );
+      if (this.$store.state.token !== '') {
+        request.headers.append("Authorization", this.$store.state.token);
+      }
       var response = await fetch(request);
       if (response.status === 200) {
         localStorage.removeItem('token');
-        router.go(0);
+        localStorage.removeItem('user');
+        localStorage.removeItem('authorised');
+        this.$forceUpdate();
+        await router.push("/sign-in");
       }
-     },
+    },
 
     openMenu() {
       if (this.isDisplayed === 'none') {
@@ -53,7 +61,13 @@ export default {
       } else {
         this.isDisplayed = 'none';
       }
+    },
+    async getAdminPage() {
+      await router.push("/admin");
     }
+  },
+  beforeDestroy() {
+    this.isDisplayed = 'none';
   }
 }
 </script>

@@ -9,6 +9,6 @@ export default {
   name: 'Home',
   components: {
     HomeLayout
-  }
+  },
 }
 </script>

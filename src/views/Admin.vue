@@ -1,15 +1,16 @@
 <template>
-<div class="admin-wrapper">
-  <a href="/admin/users">Список всех пользователей</a>
-  <admin-search/>
-</div>
+  <div class="admin-wrapper ">
+    <admin-search/>
+    <users-for-admin></users-for-admin>
+  </div>
 </template>
 
 <script>
 import AdminSearch from "../layouts/AdminSearch";
+import UsersForAdmin from "@/layouts/UsersForAdmin";
 export default {
   name: "Admin",
-  components: {AdminSearch}
+  components: {UsersForAdmin, AdminSearch},
 }
 </script>
 
