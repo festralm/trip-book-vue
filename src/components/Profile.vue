@@ -47,7 +47,8 @@
           <p class="name p-0 m-0">Здравствуйте, меня зовут
             <span v-if="!editing">{{user.name}}</span>
             <b-input v-model="userEdit.name" v-else class="name-input py-1 my-1" ></b-input>!</p>
-          <p class="p-0 m-0 pt-1 joined mb-5">На Tripbook с {{new Date(user.joined).getFullYear()}}</p>
+          <p class="p-0 m-0 pt-1 joined mb-2">На Tripbook с {{new Date(user.joined).getFullYear()}}</p>
+          <b-button @click="goToMessages()" v-if="id !== null " class="mb-5" variant="outline-warning">Написать</b-button>
         </div>
         <div class="long"></div>
         <div v-if="id == null" class="ms-2 right">
@@ -138,6 +139,9 @@ export default {
     }
   },
   methods: {
+    goToMessages() {
+      router.push('/messages/' + this.user.id)
+    },
     revertEdit() {
       this.$forceUpdate()
       this.editing = false;
