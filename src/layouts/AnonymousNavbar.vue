@@ -1,18 +1,17 @@
 <template>
-  <div class="drop-down">
-    <div class="sign-in">
-      <a href="/sign-in">Войти</a>
+  <b-col class="my-dropdown" >
+    <div class="icon">
+      <button class="my-dropdown-toggle" @click="openMenu()">
+        <img class="m-0 p-0 " width="55%" src="https://img.icons8.com/pastel-glyph/64/000000/gender-neutral-user.png"/>
+      </button>
     </div>
-    <div class="sign-up">
-      <a href="/sign-up">Зарегистрироваться</a>
+    <div class="dropdown-content p-3 mt-3" v-bind:style="{display: isDisplayed}">
+      <a class="my-dropdown-item py-2" href="/sign-in">Войти</a>
+      <a class="my-dropdown-item py-2" href="/sign-up" >Зарегистрироваться</a>
+      <hr>
+      <a class="my-dropdown-item py-2" href="/rent-transport">Сдать транспорт в аренду</a>
     </div>
-    <div class="rent-transport">
-      <a href="/rent-transport">Сдать транспорт в аренду</a>
-    </div>
-    <div class="admin">
-      <a href="/admin">Страница администратора</a>
-    </div>
-  </div>
+  </b-col>
 </template>
 
 <script>
@@ -21,11 +20,20 @@ export default {
   props: {
     user: {
       type: Object
+    },
+  },
+  data() {
+    return {
+      isDisplayed: 'none',
     }
   },
   methods: {
-    logout() {
-
+    openMenu() {
+      if (this.isDisplayed === 'none') {
+        this.isDisplayed = 'block';
+      } else {
+        this.isDisplayed = 'none';
+      }
     }
   }
 }

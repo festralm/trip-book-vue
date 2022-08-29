@@ -1,14 +1,17 @@
 <template>
   <div class="default">
+    <background-layout></background-layout>
     <router-view/>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import BackgroundLayout from "@/layouts/BackgroundLayout";
 
 export default {
   name: "DefaultLayout",
+  components: {BackgroundLayout},
   data() {
     return {
     }
@@ -44,6 +47,7 @@ export default {
   }
   body {
     line-height: 1;
+    font-family: 'Roboto Mono', monospace;
   }
   ol, ul {
     list-style: none;
@@ -52,12 +56,17 @@ export default {
     quotes: none;
   }
   blockquote:before, blockquote:after,
-  q:before, q:after {
-    content: '';
-    content: none;
-  }
   table {
     border-collapse: collapse;
     border-spacing: 0;
   }
+
+  button {
+    overflow: hidden;
+    border: none;
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+  }
+
 </style>

@@ -1,0 +1,14 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: HKGrotesk-Light
+font link: https://hanken.co/product/hk-grotesk/
+font author: Hanken Design Co.
+font author site: https://hanken.co/
+
+
+icon designer: James Keuning
+icon designer link: /jmkeuning
+        
+{"bg":"#8F532C","icon":"#001C0F","font":"#ffffff","slogan":"#ffffff"}
+      
