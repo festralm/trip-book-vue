@@ -1,19 +1,15 @@
 <template>
   <div id="app">
-    <users/>
+    <menu-layout/>
+    <router-view/>
   </div>
 </template>
 
-<script>
-
-import Users from "./components/Users";
-export default {
-  name: 'App',
-  components: {
-    Users
-  }
-}
-</script>
-
 <style>
 </style>
+<script>
+import MenuLayout from "./layouts/MenuLayout";
+export default {
+  components: {MenuLayout}
+}
+</script>
